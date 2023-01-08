@@ -1,0 +1,33 @@
+* {padding: 0; border: 0; margin: 0;}
+
+body {
+  text-align: center;
+  background-image: url("../imgs/isomeros.png");
+  background-size: 100% 100vh;
+  background-repeat: no-repeat;
+}
+
+.title {
+  font-size: 3.2em;
+  margin-top: 2em;
+}
+
+.main-container {
+  display: block;
+  margin: 4em auto 0;
+}
+
+.main-btn {
+  cursor: pointer;
+  color: #FFF;
+  padding: 1em 2em;
+  border: 1px solid #000;
+  border-radius: 10px;
+}
+
+.fase1 {background: #F00;}
+.fase1:hover {background: #B00;}
+.fase2 {background: #0F0;}
+.fase2:hover {background: #0B0;}
+.fase3 {background: #08F;}
+.fase3:hover {background: #06B;}

@@ -1,4 +1,4 @@
-import { collisionMouseInPath, collisionMouseClick } from '../utils.js'
+import { collisionMouseInPath, collisionMouseClick, rectRound } from '../utils.js'
 
 const createButton = (style, mouse, cb, ctx) => {
   const frameStyle = {
@@ -27,7 +27,7 @@ const createButton = (style, mouse, cb, ctx) => {
     }
     const { x, y, width, height, radius, shape } = frame
     
-    shape.roundRect(x, y, width, height, radius)
+    rectRound(shape, x, y, width, height, radius)
 
     state.isMouseHover = collisionMouseInPath(ctx, state.mouse, shape)
     

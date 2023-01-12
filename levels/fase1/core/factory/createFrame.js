@@ -1,3 +1,5 @@
+import { rectRound } from "../utils.js"
+
 const createFrame = (style, text, ctx) => {
   const frameStyle = {
     fill: "#FFF",
@@ -27,7 +29,7 @@ const createFrame = (style, text, ctx) => {
     ctx.lineWidth = frameStyle.lineWidth
 
     ctx.beginPath()
-    ctx.roundRect(frame.x, frame.y, frame.width, frame.height, frame.radius)
+    rectRound(ctx, frame.x, frame.y, frame.width, frame.height, frame.radius)
     ctx.closePath()
 
     ctx.fill()

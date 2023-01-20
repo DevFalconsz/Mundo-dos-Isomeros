@@ -1,2 +1,2 @@
-# Vagetti-dev.github.io
+# mundo dos Isômeros
 Site para estudo sobre os isômeros.

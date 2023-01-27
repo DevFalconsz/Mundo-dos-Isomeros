@@ -90,7 +90,7 @@ const createRoullete = (data, ctx) => {
 
   const startSpinRoullete = () => {
     //roullete.state.spinTimeTotal = (Math.random() * 1000) + 6000
-    roullete.state.spinTimeTotal = 5700
+    roullete.state.spinTimeTotal = 14000
     roullete.state.spinTimeCurrent = 0
   }
   

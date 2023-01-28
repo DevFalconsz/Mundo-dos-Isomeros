@@ -2,6 +2,16 @@ const scoreboard = document.querySelector('[data-js="scoreboard"]')
 const control = document.querySelector('[data-js="control"]')
 const board = document.querySelector('[data-js="board"]')
 
+var somGame = new Audio();
+somGame.src = 'audio/somGame.wav';
+somGame.volume = 0.2;
+somGame.load();
+
+function tocarAudioGame(){
+  somGame.play();
+  somGame.loop="loop";
+}
+
 const init = () => {
   const state = {
     scoreboard: null,
@@ -290,6 +300,7 @@ const init = () => {
   }
 
   setup()
+  tocarAudioGame()
 }
 
 init()

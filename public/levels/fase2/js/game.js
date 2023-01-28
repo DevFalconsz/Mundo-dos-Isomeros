@@ -2,6 +2,16 @@ const grid = document.querySelector('.grid');
 const spanPlayer = document.querySelector('.player');
 const timer = document.querySelector('.timer');
 
+var somGame = new Audio();
+somGame.src = '../audio/somGame.wav';
+somGame.volume = 0.2;
+somGame.load();
+
+function tocarAudioGame(){
+  somGame.play();
+  somGame.loop="loop";
+}
+
 const characters = [
   'img1',
   'img2',
@@ -109,6 +119,8 @@ const loadGame = () => {
     const card = createCard(character);
     grid.appendChild(card);
   });
+  
+  tocarAudioGame();
 }
 
 const startTimer = () => {

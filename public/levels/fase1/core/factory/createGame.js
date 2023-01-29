@@ -115,7 +115,7 @@ const createGame = canvas => {
       const result = shapeChrono.getTimeValue()
 
       localStorage.setItem("score-fase1", JSON.stringify(result))
-      window.location = "../../fase2"
+      window.location = "../fase2"
     })
 
     gameEvents.on("start-chrono", () => state.obj.shapeChrono.start())

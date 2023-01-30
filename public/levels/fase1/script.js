@@ -2,7 +2,7 @@ import createGame from './core/factory/createGame.js'
 
 const canvas = document.querySelector('[data-js="game"]')
 
-const game = await createGame(canvas)
+const game = createGame(canvas)
 
 game.start()
 

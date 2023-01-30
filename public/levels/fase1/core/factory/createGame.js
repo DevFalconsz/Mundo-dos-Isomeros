@@ -6,10 +6,11 @@ import createButton from './createButton.js'
 import createFrame from './createFrame.js'
 import gameEvents from '../gameEvents.js'
 
-const createGame = async canvas => {
+const createGame = canvas => {
   const ctx = canvas.getContext("2d")
-  const uploadImg = await (async () => {
-    const imgFileNames = await fetch("/imgsFase1").then(res => res.json())
+  const uploadImg = (() => {
+    const list = ["CADEIA", "FUNÇÃO", "POSIÇÃO", "METAMERIA", "TAUTOMERIA"]
+    const imgFileNames = Array(30).fill().map((_,i) => `${list[i%5]}${(i%6)+1}.png`)
 
     const imgAll = imgFileNames.map(imgFileName => {
       const img = new Image()

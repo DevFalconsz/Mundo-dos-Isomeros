@@ -6,16 +6,15 @@ import createButton from './createButton.js'
 import createFrame from './createFrame.js'
 import gameEvents from '../gameEvents.js'
 
-const createGame = canvas => {
+const createGame = async canvas => {
   const ctx = canvas.getContext("2d")
-  const uploadImg = (() => {
-    const imgNames = ["CADEIA", "FUNÇÃO", "METAMERIA", "POSIÇÃO", "TAUTOMERIA"]
-    const imgNameNumbers = ["12345", "12345", "12345", "12345", "12345"]
+  const uploadImg = await (async () => {
+    const imgFileNames = await fetch("/imgsFase1").then(res => res.json())
 
-    const imgAll = Array.from(imgNameNumbers.join("")).map((value, index) => {
+    const imgAll = imgFileNames.map(imgFileName => {
       const img = new Image()
-      img.src = "./imgs/" + imgNames[index % 5] + value + ".png"
-      img.alt = imgNames[index % 5]
+      img.src = `./imgs/${imgFileName}`
+      img.alt = imgFileName.match(/^[^\.0-9]+/m)
 
       return img
     })

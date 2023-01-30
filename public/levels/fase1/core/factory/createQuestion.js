@@ -6,7 +6,7 @@ const createQuestion = (imgs, state, ctx) => {
   const { mouse, score, accScore } = state
 
   const questionGenerate = (btnOptionsColor) => {
-    const imgNames = ["CADEIA", "FUNÇÃO", "METAMERIA", "POSIÇÃO", "TAUTOMERIA"]
+    const imgNames = imgs.map(img => img.alt).sort((a, b) => a - b).filter((v, i, a) => v != a[i+1])
     const choseImg = imgs[Math.floor(Math.random() * imgs.length)]
 
     const alternativeRandomizer = Array.from("abcde").map(value => {

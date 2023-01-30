@@ -12,7 +12,7 @@ app.use(express.static("./public"))
 
 app.get("/imgsFase1", (res, req) => {
   const listFile = readdirSync("./public/levels/fase1/imgs")
-  req.send(listFile)
+  req.send(JSON.stringify(listFile))
 })
 
 server.listen(PORT, HOST, () => {

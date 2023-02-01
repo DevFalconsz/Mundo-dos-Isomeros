@@ -27,15 +27,15 @@ const init = () => {
 
   const setup = () => {
     state.data.objRef = {
-      "but 1 eno e but2 eno":       "posicao",
+      "but 1 eno e but 2 eno":      "posicao",
       "cliclopropano e propano":    "nucleo",
       "metoxipropano etoxietano":   "compensacao",
       "etoxietano e butanol":       "funcional",
       "but 2 eno":                  "geometrica",
       "butano e metil propano":     "cadeia",
       "acetona e propenol":         "tautomeria",
-      "dicloco e but 2 e eno":      "geometria",
-      "carbo quiral":               "optica",
+      "dicloro e but 2 eno":        "geometria",
+      "carbono quiral":             "optica",
     }
     
     state.data.controlText = Object.keys(state.data.objRef)

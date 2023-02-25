@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.post("/register", async (req, res) => {
   try {
-    const users = await User.find({})
+    const users = await User.find()
     const isUserEqual = users.some(user => {
       return user.name === req.body.name && userscores.every((score, i) => score === req.body.scores[i])
     })
@@ -22,11 +22,11 @@ router.post("/register", async (req, res) => {
   }
 })
 
-router.post("/all", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const users = await User.find()
     const usersSorted = users.sort((a, b) => a.total - b.total)
-    
+
     res.send({ users: usersSorted })
   } catch {
     return res.status(400).send({ error: "get database failed" })

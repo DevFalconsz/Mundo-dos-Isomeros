@@ -13,12 +13,7 @@ const timeFormat = time => {
 }
 
 const getUserList = async () => {
-  await fetch("/auth/all", {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
+  await fetch("/auth/all")
   .then(res => res.json())
   .then(db => {
     Array(16).fill().forEach((_,i) => {

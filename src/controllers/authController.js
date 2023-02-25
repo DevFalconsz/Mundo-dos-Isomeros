@@ -24,8 +24,10 @@ router.post("/register", async (req, res) => {
 
 router.post("/all", async (req, res) => {
   try {
-    const users = await User.find({})
-    res.send({ users: users.sort((a, b) => a.total - b.total) })
+    const users = await User.find()
+    const usersSorted = users.sort((a, b) => a.total - b.total)
+    
+    res.send({ users: usersSorted })
   } catch {
     return res.status(400).send({ error: "get database failed" })
   }

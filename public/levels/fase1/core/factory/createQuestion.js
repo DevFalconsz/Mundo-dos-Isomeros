@@ -78,7 +78,8 @@ const createQuestion = (imgs, state, ctx) => {
     btnOptionsColor: btnOptionsColor,
     popup: null,
     attempts: 3,
-    ...(questionGenerate(btnOptionsColor))
+    ...(questionGenerate(btnOptionsColor)),
+    resolve: null
   }
 
   const frameQuestion = createFrame({
@@ -91,18 +92,17 @@ const createQuestion = (imgs, state, ctx) => {
     const altFormated = alt.split(" ").splice(-1).join("").toLocaleUpperCase()
     const stringAlertSucess = "Resposta correta!"
     const stringAlertFail = `Resposta errada, Tentativas: ${question.attempts - 1}`
-    const stringAlertFinish = "Parabéns você conseguiu! \\O/"
+    const stringAlertNoAttempts = "Não foi dessa vez!"
+    const scoreMaxForTheWin = 40
 
     let string = ""
 
     if (altFormated === res) {
       string = stringAlertSucess
-      
-      if ((question.accScore + question.score) >= 100) {
-        string = stringAlertFinish
-      }
-    } else {
+    } else if (altFormated !== res && (question.attempts - 1) !== 0) {
       string = stringAlertFail
+    } else {
+      string = stringAlertNoAttempts
     }
 
     if (!question.popup) {
@@ -117,8 +117,6 @@ const createQuestion = (imgs, state, ctx) => {
         stroke: "#0000",
       }, ctx)
 
-      gameEvents.emit("pause-chrono")
-
       setTimeout(() => {
         question.btnOptionsColor[btnOptionIndex] = altFormated === res ? "#0F0" : "#F00"
 
@@ -126,11 +124,12 @@ const createQuestion = (imgs, state, ctx) => {
         question.popup = null
 
         if (!(altFormated === res)) {
-          gameEvents.emit("start-chrono")
           question.attempts -= 1
         }
 
         if (question.attempts === 0) {
+          gameEvents.emit("pause-chrono")
+
           question.btnOptionsColor = ["#000", "#000", "#000", "#000", "#000"]
 
           const { img, alt, response, btnOptions } = questionGenerate(question.btnOptionsColor)
@@ -139,11 +138,14 @@ const createQuestion = (imgs, state, ctx) => {
           question.alt = alt
           question.response = response
           question.btnOptions = btnOptions
+          question.resolve = false
 
           gameEvents.emit("result-incorrect")
         }
 
         if (altFormated === res) {
+          gameEvents.emit("pause-chrono")
+
           question.btnOptionsColor = ["#000", "#000", "#000", "#000", "#000"]
 
           const { img, alt, response, btnOptions } = questionGenerate(question.btnOptionsColor)
@@ -152,8 +154,9 @@ const createQuestion = (imgs, state, ctx) => {
           question.alt = alt
           question.response = response
           question.btnOptions = btnOptions
+          question.resolve = true
 
-          if ((question.accScore + question.score) >= 100) {
+          if ((question.accScore + question.score) >= scoreMaxForTheWin) {
             gameEvents.emit("end-game")
           } else {
             gameEvents.emit("result-correct")
@@ -241,9 +244,17 @@ const createQuestion = (imgs, state, ctx) => {
     question.accScore = accScore
   }
 
+  const getActualScore = () => {
+    const { score, accScore, resolve } = question
+    const actualScore = resolve ? accScore + score : accScore
+
+    return String(actualScore || 0).padStart(2, "0") || "00"
+  }
+
   return {
     render,
-    update
+    update,
+    getActualScore
   }
 }
 

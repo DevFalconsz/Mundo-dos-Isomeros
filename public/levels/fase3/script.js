@@ -2,15 +2,10 @@ const scoreboard = document.querySelector('[data-js="scoreboard"]')
 const control = document.querySelector('[data-js="control"]')
 const board = document.querySelector('[data-js="board"]')
 
-var somGame = new Audio();
-somGame.src = 'audio/somGame.wav';
-somGame.volume = 0.2;
-somGame.load();
-
-function tocarAudioGame(){
-  somGame.play();
-  somGame.loop="loop";
-}
+const soundtrack = new Audio('audio/somGame.wav')
+soundtrack.volume = 0.2
+soundtrack.loop = "loop"
+soundtrack.play()
 
 const init = () => {
   const state = {
@@ -23,6 +18,12 @@ const init = () => {
       tileText: [],
       objRef: {},
     },
+  }
+
+  const timestamp = {
+    timerID: null,
+    current: 0,
+    start: 0,
   }
 
   const setup = () => {
@@ -60,6 +61,17 @@ const init = () => {
     })
     scoreboard.append(documentFragmentscoreboard)
 
+    const timespan = document.createElement("span")
+    const timediv = document.createElement("div")
+
+    timediv.classList.add("time-container")
+    timespan.classList.add("time")
+
+    timespan.innerHTML = "00:00"
+    timediv.append(timespan)
+
+    scoreboard.insertBefore(timediv, scoreboard.lastChild)
+
     state.board = createBoard(state.data)
 
     const documentFragmentControl = new DocumentFragment()
@@ -75,6 +87,24 @@ const init = () => {
     state.turn = "player1"
 
     control.addEventListener("click", handleMouse, { once: true })
+
+    const timeFormat = () => {
+      const time = timestamp.current - timestamp.start
+      const secs = String(Math.floor(time / 1000) % 60).padStart(2, "0")
+      const mins = String(Math.floor(time / 60000) % 60).padStart(2, "0")
+    
+      return `${mins}:${secs}`
+    }
+
+    const timer = document.querySelector('.time')
+
+    timestamp.start = Date.now()
+    timestamp.current = Date.now()
+
+    timestamp.timerID = setInterval(() => {
+      timestamp.current = Date.now()
+      timer.innerHTML = timeFormat()
+    }, 1000)
   }
 
   const createBoard = ({ tileText, controlText }) => {
@@ -154,10 +184,12 @@ const init = () => {
 
     const handleBotAction = () => {
       const { turn, players } = state
-      players[turn].chooseTile(state)
+      players[turn]?.chooseTile(state)
       
       if (checkedBoard()) {
-        control.addEventListener("click", handleMouse, { once: true })
+        setTimeout(() => {
+          control.addEventListener("click", handleMouse, { once: true })
+        }, 1100)
         return
       }
 
@@ -219,8 +251,24 @@ const init = () => {
     const { name, score } = players[turn]
     scoreboard[scoreboardIndex].score.children[0].textContent = `${name} - ${score}`
 
-    if(state.players.player1.score == 3){
-      window.location.href = "./final.html";
+    if (players.player1.score >= 3) {
+      clearInterval(timestamp.timerID)
+      const time = timestamp.current - timestamp.start
+
+
+      const user = JSON.parse(localStorage.getItem("user"))
+      user.scores[2] = Math.floor(time / 1000)
+      localStorage.setItem("user", JSON.stringify(user))
+
+      location = "../final"
+    }
+
+    if (players.player2.score >= 3) {
+      players.player1.score = 0
+      players.player2.score = 0
+
+      timestamp.start = Date.now()
+      timestamp.current = Date.now()
     }
   }
 
@@ -266,7 +314,7 @@ const init = () => {
     return {randomizeTileText, randomizeControlText}
   }
 
-  const handleMouse = ({ target }) => {
+  const handleMouse = async ({ target }) => {
     if (target === control) {
       control.addEventListener("click", handleMouse, { once: true })
       return
@@ -288,7 +336,9 @@ const init = () => {
     target.classList.add("selected")
 
     if (checkedBoard()) {
-      control.addEventListener("click", handleMouse, { once: true })
+      setTimeout(() => {
+        control.addEventListener("click", handleMouse, { once: true })
+      }, 1100)
       return
     }
 
@@ -296,11 +346,12 @@ const init = () => {
     const nextTurn = playerList[playerList.indexOf(turn) + 1] || playerList[0]
     state.turn = nextTurn
 
-    setTimeout(players[state.turn].handleBotAction, 500)
+    if (nextTurn === "player2") {
+      setTimeout(players[state.turn].handleBotAction, 500)
+    }
   }
 
   setup()
-  tocarAudioGame()
 }
 
 init()

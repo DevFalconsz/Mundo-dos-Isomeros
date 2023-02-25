@@ -58,6 +58,17 @@ const createGame = canvas => {
     const shapeQuestion = createQuestion(uploadImg, state, ctx)
     const shapeChrono = createChrono(ctx)
 
+    const frameScore = createFrame({
+      fill: "#CCC",
+      stroke: "#888",
+      lineWidth: 4,
+    }, {
+      font: "25px verdana",
+      string: "Score: 0",
+      fill: "#000",
+      stroke: "#0000",
+    }, ctx)
+
     const gameSteps = {
       "spin-roullete": [
         renderSpinRoullete,
@@ -112,10 +123,15 @@ const createGame = canvas => {
     })
 
     gameEvents.on("end-game", () => {
-      const result = shapeChrono.getTimeValue()
+      gameObserver.unsubscribleAll()
+      
+      const time = shapeChrono.getTime()
+      
+      const user = JSON.parse(localStorage.getItem("user"))
+      user.scores[0] = Math.floor(time / 1000)
+      localStorage.setItem("user", JSON.stringify(user))
 
-      localStorage.setItem("score-fase1", JSON.stringify(result))
-      window.location.href = "https://www.professorcd.com/levels/fase2/index.html"
+      location = "../final"
     })
 
     gameEvents.on("start-chrono", () => state.obj.shapeChrono.start())
@@ -127,6 +143,7 @@ const createGame = canvas => {
       buttonSpin,
       shapeQuestion,
       shapeChrono,
+      frameScore
     }
 
     gameObserver.unsubscribleAll()
@@ -176,11 +193,20 @@ const createGame = canvas => {
       radius: 5,
     }
 
+    const frameScoreProps = {
+      x: 20,
+      y: screenHeight - 70,
+      width: 150,
+      height: 50,
+      radius: 5,
+    }
+
     const frameAlertProps = frameRoulleteProps
 
     state.obj.frameRoullete.render(frameRoulleteProps)
     state.obj.roullete.render(roulleteProps)
     state.obj.buttonSpin.render(buttonSpinProps)
+    state.obj.frameScore.render(frameScoreProps, `Score: ${state.obj.shapeQuestion.getActualScore()}`)
 
     ctx.canvas.style.cursor = state.obj.buttonSpin.state.isMouseHover ? "pointer" : "default"
 
@@ -195,7 +221,7 @@ const createGame = canvas => {
 
     const frameChronoProps = {
       x: 10, y: 10,
-      width: 100, height: 30, radius: 10,
+      width: 75, height: 30, radius: 10,
     }
 
     const frameQuestionProps = {

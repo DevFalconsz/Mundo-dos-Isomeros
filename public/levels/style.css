@@ -1,33 +1,67 @@
-* {padding: 0; border: 0; margin: 0;}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  user-select: none; outline: none;
+  box-sizing: border-box;
+  font-family: 'Press Start 2P';font-weight: lighter;
+  padding: 0; margin: 0; border: 0;
+}
 
 body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-items: center;
+  background: #222;
+  height: 100vh;
+}
+
+.container-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw;
+}
+
+.container-header {
   text-align: center;
-  background-image: url("../imgs/isomeros.png");
-  background-size: 100% 100vh;
-  background-repeat: no-repeat;
 }
 
 .title {
-  font-size: 3.2em;
-  margin-top: 2em;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  color: #CCC;
 }
 
-.main-container {
-  display: block;
-  margin: 4em auto 0;
+.subtitle {
+  font-size: 1.2rem;
+  line-height: 2.5rem;
+  color: #CCC;
 }
 
-.main-btn {
+.container-paragraph {
+  width: 80%;
+  margin: 1rem 0;
+}
+
+.paragraph {
+  text-align: justify;
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+  color: #CCC;
+}
+.paragraph:nth-child(1) {
+  margin-bottom: 1rem;
+}
+
+.button-start {
   cursor: pointer;
+  width: 15rem;
   color: #FFF;
-  padding: 1em 2em;
-  border: 1px solid #000;
-  border-radius: 10px;
+  background: #C00;
+  padding: 0.5rem 0.2rem;
+  border-radius: 5px;
 }
-
-.fase1 {background: #F00;}
-.fase1:hover {background: #B00;}
-.fase2 {background: #0F0;}
-.fase2:hover {background: #0B0;}
-.fase3 {background: #08F;}
-.fase3:hover {background: #06B;}
+.button-start:hover {
+  background: #800;
+}

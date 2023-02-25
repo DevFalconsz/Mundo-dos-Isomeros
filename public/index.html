@@ -5,17 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="style.css">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> -->
+
+    <link rel="icon" href="./favicon.png">
     <title>Mundo dos Isômeros</title>
   </head>
 
   <body>
-    <h1 class="title">Mundo dos Isômeros</h1>
+    <form class="container-menu">
+      <img class="menu-icon" src="./favicon.png" alt="atom icon">
+      <h1 class="menu-text">Olá, bem vindo ao Mundo do Isômeros!</h1>
+      <input class="menu-input" type="text" placeholder="digite seu nome">
+      <button class="menu-button disable" type="submit">Iniciar</button>
+    </form>
 
-    <div class="main-container">
-      <button data-js="start" class="start">Start</button>
-    </div>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script> -->
+    <table class="container-leaderboard invisible">
+      <caption class="leaderboard-title">Leaderboard</caption>
+      <thead class="leaderboard-head">
+        <tr>
+          <th>Rank</th>
+          <th>Nome</th>
+          <th>Nível 1</th>
+          <th>Nível 2</th>
+          <th>Nível 3</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody class="leaderboard-body"></tbody>
+      <tfoot class="leaderboard-foot">
+        <tr>
+          <td colspan="6">Your Rank</td>
+        </tr>
+        <tr>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.0/purify.min.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

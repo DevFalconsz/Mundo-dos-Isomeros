@@ -1,16 +1,6 @@
 import { rad, deg, easeOut } from '../utils.js'
 import gameEvents from '../gameEvents.js'
 
-var somRoleta = new Audio();
-somRoleta.src = 'audio/somRoleta.wav';
-somRoleta.volume = 0.2;
-somRoleta.load();
-
-function tocarAudioRoleta(){
-  somRoleta.play();
-  somRoleta.loop="loop";
-}
-
 const createRoullete = (data, ctx) => {
   const roullete = {
     data: data,
@@ -101,7 +91,6 @@ const createRoullete = (data, ctx) => {
     if (roullete.state.status === "start") {
       roullete.state.status = "running"
       startSpinRoullete()
-      tocarAudioRoleta()
       return
     }
 

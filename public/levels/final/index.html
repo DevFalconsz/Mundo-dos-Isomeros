@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="./style.css">
+
+		<link rel="icon" href="../../favicon.png">
+		<title>Parabêns!</title>
+	</head>
+
+	<body>
+		<main class="container-score">
+			<h1 class="score-title">V</h1>
+
+			<table class="score-table">
+				<caption class="score-caption">
+					Seu nome: <span class="score-name">default</span>
+				</caption>
+				<thead class="score-head">
+					<tr>
+						<th>Nível 1</th>
+						<th>Nível 2</th>
+						<th>Nível 3</th>
+					</tr>
+				</thead>
+				<tbody class="score-body">
+					<tr>
+						<td class="without-score">00:00</td>
+						<td class="without-score">00:00</td>
+						<td class="without-score">00:00</td>
+					</tr>
+				</tbody>
+				<tfoot class="score-foot">
+					<tr>
+						<td colspan="2">Total: </td>
+						<td class="score-total without-score">00:00</td>
+					</tr>
+				</tfoot>
+			</table>
+
+			<button class="button-continue" type="button">Continuar</button>
+		</main>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.0/purify.min.js"></script>
+		<script src="./script.js"></script>
+	</body>
+</html>

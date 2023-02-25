@@ -2,35 +2,36 @@ import createFrame from './createFrame.js'
 
 const createChrono = (ctx) => {
   const chrono = {
-    timeID: null,
-    timeCurrent: 0,
-    timeFormated: "00:00:00"
+    timerID: null,
+    timestampStart: 0,
+    timestampCurrent: 0,
+    timestampAccumulate: 0
   }
 
-  const timeFormat = (timeCurrent) => {
-    const decimalSeconds = String(timeCurrent % 100).padStart(2, "0")
-    const seconds = String(Math.floor((timeCurrent / 100) % 60)).padStart(2, "0")
-    const minutes = String(Math.floor((timeCurrent / 6000) % 60)).padStart(2, "0")
+  const timeFormat = () => {
+    const { timestampStart, timestampCurrent, timestampAccumulate } = chrono
+    const time = timestampAccumulate + (timestampCurrent - timestampStart)
 
-    return [minutes, seconds, decimalSeconds].join(":")
+    const seconds = String(Math.floor(time / 1000) % 60).padStart(2, "0")
+    const minutes = String(Math.floor(time / 60000) % 60).padStart(2, "0")
+
+    return `${minutes}:${seconds}`
   }
 
-  const render = (coord) => {
-    chrono.timeFormated = timeFormat(chrono.timeCurrent)
-
+  const render = coord => {
     const frameChrono = createFrame({
       fill: "#CCC",
       stroke: "#888",
       lineWidth: 4,
     }, {
-      string: chrono.timeFormated,
+      string: timeFormat(),
       fill: "#000",
       stroke: "#0000"
     }, ctx)
 
     const frameChronoProps = {
       x: 0, y: 0,
-      width: 150, height: 50,
+      width: 75, height: 50,
       radius: 10,
       ...coord
     }
@@ -39,25 +40,33 @@ const createChrono = (ctx) => {
   }
 
   const start = () => {
-    chrono.timeID = setInterval(() => {
-      chrono.timeCurrent += 1
-    }, 10)
+    chrono.timestampStart = Date.now()
+    chrono.timestampCurrent = Date.now()
+
+    chrono.timerID = setInterval(() => {
+      chrono.timestampCurrent = Date.now()
+
+      const { timestampStart, timestampCurrent, timestampAccumulate } = chrono
+      const time = timestampAccumulate + (timestampCurrent - timestampStart)
+
+      console.log(time)
+    }, 1000)
   }
 
   const pause = () => {
-    clearInterval(chrono.timeID)
+    clearInterval(chrono.timerID)
+    chrono.timestampAccumulate += chrono.timestampCurrent - chrono.timestampStart
+    chrono.timestampCurrent = 0
+    chrono.timestampStart = 0
   }
 
-  const getTimeValue = () => ({
-    timeCurrent: chrono.timeCurrent,
-    timeFormated: chrono.timeFormated
-  })
+  const getTime = () => chrono.timestampAccumulate
 
   return {
     render,
     start,
     pause,
-    getTimeValue
+    getTime
   }
 }
 

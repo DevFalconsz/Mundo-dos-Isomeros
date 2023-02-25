@@ -16,7 +16,7 @@ const createFrame = (style, text, ctx) => {
     ...text
   }
 
-  const render = coord => {
+  const render = (coord, str = "") => {
     const frame = {
       x: 0, y: 0,
       width: 100, height: 100,
@@ -41,8 +41,8 @@ const createFrame = (style, text, ctx) => {
     ctx.textAlign = "center"
     ctx.textBaseline = textStyle.textBaseline
 
-    ctx.fillText(textStyle.string, frame.x + (frame.width / 2), frame.y + (frame.height / 2))
-    ctx.strokeText(textStyle.string, frame.x + (frame.width / 2), frame.y + (frame.height / 2))
+    ctx.fillText(str || textStyle.string, frame.x + (frame.width / 2), frame.y + (frame.height / 2))
+    ctx.strokeText(str || textStyle.string, frame.x + (frame.width / 2), frame.y + (frame.height / 2))
   }
 
   return { render }

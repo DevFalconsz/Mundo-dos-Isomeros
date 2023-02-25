@@ -1,28 +1,124 @@
-* {padding: 0; border: 0; margin: 0;}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  user-select: none; outline: none;
+  box-sizing: border-box;
+  font-family: 'Press Start 2P';font-weight: lighter;
+  padding: 0; margin: 0; border: 0;
+}
 
 body {
-  text-align: center;
-  background-image: url("./imgs/isomeros.png");
-  background-size: 100% 100vh;
-  background-repeat: no-repeat;
-}
-
-.title {
-  font-size: 3.2em;
-  margin-top: 2em;
-}
-
-.main-container {
-  display: block;
-  margin: 4em auto 0;
-}
-
-.start {
-  cursor: pointer;
-  color: #FFF;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
   background: #222;
-  padding: 1em 2em;
-  border: 1px solid #000;
-  border-radius: 10px;
+  height: 100vh;
 }
-.start:hover {background: #888;}
+
+.container-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 25rem;
+  gap: 1rem;
+  margin: 2.5rem 1rem;
+}
+
+.menu-icon {
+  width: 8rem;
+  border-radius: 50%;
+}
+
+.menu-text {
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  color: #FFF;
+}
+
+.menu-input {
+  font-size: 1.1rem;
+  width: 24rem;
+  height: 2.1rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.menu-input:placeholder-shown {font-size: 0.8rem;}
+
+.menu-button {
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #FFF;
+  background: #C00;
+  width: 24rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+.menu-button:not(.disable):hover {background: #A00;}
+
+.disable {
+  cursor: default;
+  color: #FFF;
+  background: #888;
+}
+
+.container-leaderboard {
+  text-align: center;
+  background: #888;
+  border-spacing: 0.5rem;
+  padding: 0.2rem;
+  border-radius: 0 0 5px 5px;
+  margin: 2.5rem 1rem;
+}
+
+.leaderboard-title {
+  text-decoration: underline;
+  font-size: 1.1rem;
+  color: #FFF;
+  background: #888;
+  padding: 0.4rem 0.2rem 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.leaderboard-head {
+  font-size: 0.7rem;
+  background: #CCC;
+}
+.leaderboard-head tr th {
+  width: clamp(2rem, 10vw, 6rem);
+  padding: 0.3rem 0.2rem;
+}
+.leaderboard-head tr th:nth-child(1) {
+  width: 2rem;
+}
+
+.leaderboard-body {
+  font-size: 0.6rem;
+  background: #AAA;
+}
+.leaderboard-body tr td {
+  font-weight: bold;
+  padding: 0.2rem;
+}
+
+.leaderboard-foot {
+  font-size: 0.8rem;
+  background: #CCC;
+}
+.leaderboard-foot tr td {
+  font-weight: bold;
+  padding: 0.3rem 0.2rem;
+}
+.leaderboard-foot tr:nth-child(1) td {
+  color: #FFF;
+  background: #888;
+}
+.leaderboard-foot :is([colspan]) {
+  font-size: 1.2rem;
+  font-weight: lighter;
+}
+.leaderboard-foot :is(span) {
+  text-decoration: underline;
+}

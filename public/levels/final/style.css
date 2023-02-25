@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  user-select: none; outline: none;
+  box-sizing: border-box;
+  font-family: 'Press Start 2P';font-weight: lighter;
+  padding: 0; margin: 0; border: 0;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  height: 100vh;
+}
+
+.container-score {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: #CCC;
+	width: 60vw;
+	padding: 1rem 0;
+	border-radius: 5px;
+}
+
+.score-title {
+	font-size: 2rem;
+	color: #444;
+	margin: 1rem 0;
+}
+
+.score-table {
+	background: #888;
+	width: 70%;
+	margin: 1rem;
+	padding: 0.5rem;
+	border-collapse: collapse;
+	border-radius: 0 0 1px 1px;
+	box-shadow: 0 0 0 0.5rem #888;
+}
+.score-table tr th, .score-table tr td {
+	padding: 0.5rem;
+	border: 1px solid #FFF;
+}
+
+.score-caption {
+	font-size: 1.2rem;
+	background: #888;
+	padding: 1rem 0.5rem;
+	border: 1px solid #FFF;
+	border-bottom: 0;
+	border-radius: 1px 1px 0 0;
+	box-shadow: 0 0 0 0.5rem #888;
+}
+
+.score-name {
+	text-decoration: underline;
+	font-size: 1.5rem;
+	color: #FFF;
+}
+
+.score-head {
+	text-align: center;
+	font-size: 1.1rem;
+}
+
+.score-body {
+	text-align: center;
+	color: #FFF;
+}
+
+.score-foot {
+	font-size: 1.1rem;
+}
+
+.score-total {
+	text-align: center;
+	color: #FFF;
+}
+
+.without-score {
+	color: #CCC;
+}
+
+.button-continue {
+	cursor: pointer;
+	font-size: 1.2rem;
+	color: #FFF;
+	background: #C00;
+	width: 15rem;
+	padding: 1rem 0.5rem;
+	border-radius: 5px;
+}
+.button-continue:hover {background: #800;}

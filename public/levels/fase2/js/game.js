@@ -1,16 +1,11 @@
-const grid = document.querySelector('.grid');
 const spanPlayer = document.querySelector('.player');
 const timer = document.querySelector('.timer');
+const grid = document.querySelector('.grid');
 
-var somGame = new Audio();
-somGame.src = '../audio/somGame.wav';
-somGame.volume = 0.2;
-somGame.load();
-
-function tocarAudioGame(){
-  somGame.play();
-  somGame.loop="loop";
-}
+const soundtrack = new Audio('../audio/somGame.wav');
+soundtrack.volume = 0.2;
+soundtrack.loop = "loop";
+soundtrack.play();
 
 const characters = [
   'img1',
@@ -25,6 +20,12 @@ const characters = [
   'img10',
 ];
 
+const timestamp = {
+  timerID: null,
+  start: 0,
+  current: 0,
+};
+
 const createElement = (tag, className) => {
   const element = document.createElement(tag);
   element.className = className;
@@ -38,9 +39,13 @@ const checkEndGame = () => {
   const disabledCards = document.querySelectorAll('.disabled-card');
 
   if (disabledCards.length === 20) {
-    clearInterval(this.loop);
-    alert(`Parabéns, ${spanPlayer.innerHTML}! Seu tempo foi: ${timer.innerHTML}`);
-    window.location.href = "../../fase3/";
+    clearInterval(timestamp.timerID);
+    
+    const user = JSON.parse(localStorage.getItem("user"));
+    user.scores[1] = Math.floor((timestamp.current - timestamp.start) / 1000);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    location = "../../final";
   }
 }
 
@@ -119,21 +124,28 @@ const loadGame = () => {
     const card = createCard(character);
     grid.appendChild(card);
   });
-  
-  tocarAudioGame();
+}
+
+const timeFormat = () => {
+  const time = timestamp.current - timestamp.start;
+  const secs = String(Math.floor(time / 1000) % 60).padStart(2, "0");
+  const mins = String(Math.floor(time / 60000) % 60).padStart(2, "0");
+
+  return `${mins}:${secs}`;
 }
 
 const startTimer = () => {
+  timestamp.start = Date.now();
+  timestamp.current = Date.now();
 
-  this.loop = setInterval(() => {
-    const currentTime = +timer.innerHTML;
-    timer.innerHTML = currentTime + 1;
+  timestamp.timerID = setInterval(() => {
+    timestamp.current = Date.now();
+    timer.innerHTML = timeFormat();
   }, 1000);
-
 }
 
 window.onload = () => {
-  spanPlayer.innerHTML = localStorage.getItem('player');
+  spanPlayer.innerHTML = "default";
   startTimer();
   loadGame();
 }

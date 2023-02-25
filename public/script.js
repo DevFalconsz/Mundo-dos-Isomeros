@@ -12,7 +12,13 @@ const timeFormat = time => {
   return `${mins}:${secs}`
 }
 
-fetch("/auth/all", {method: "POST"})
+const getUserList = async () => {
+  await fetch("/auth/all", {
+    method: "POST",
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
   .then(res => res.json())
   .then(db => {
     Array(16).fill().forEach((_,i) => {
@@ -56,6 +62,9 @@ fetch("/auth/all", {method: "POST"})
     })
   })
   .catch(err => console.log(err))
+}
+
+getUserList()
 
 btnSubmit.addEventListener("click", e => {
   e.preventDefault()

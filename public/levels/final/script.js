@@ -60,13 +60,13 @@ const playsoundtrack = () => {
   soundtrack.play()
 }
 
-const handleRanking = () => {
+const handleRanking = async () => {
   const userAsJson = localStorage.getItem("user")
   const userAsJsonSanitize = DOMPurify.sanitize(userAsJson)
   const user = JSON.parse(userAsJsonSanitize)
 
   if (user.scores.length === 3) {
-    fetch("../../auth/register", {
+    await fetch("../../auth/register", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

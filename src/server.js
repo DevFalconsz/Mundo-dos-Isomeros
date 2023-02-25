@@ -9,7 +9,7 @@ const server = createServer(app)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.use(express.static("./public"))
+app.use(express.static("public"))
 app.use("/auth", router)
 
 server.listen(3000)

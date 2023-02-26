@@ -3,6 +3,11 @@ const tfoot = document.querySelector(".leaderboard-foot")
 const btnSubmit = document.querySelector(".menu-button")
 const inputName = document.querySelector(".menu-input")
 
+const SUPABASE_URL = "https://cgxrznxnjxxvsymdmatc.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNneHJ6bnhuanh4dnN5bWRtYXRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzczNjk2MDcsImV4cCI6MTk5Mjk0NTYwN30.r55VK2Z_7pUz9UrruWDMRvQcoyVQMhBP3GC54aXDtTM"
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
 const timeFormat = time => {
   if ((typeof time) === "string") { return time }
 
@@ -13,50 +18,54 @@ const timeFormat = time => {
 }
 
 const getUserList = async () => {
-  await fetch("/auth/all")
-  .then(res => res.json())
-  .then(db => {
-    Array(16).fill().forEach((_,i) => {
-      const placeholder = {
-        name: "-",
-        scores: Array(3).fill("-"),
-        total: "-"
-      }
+  const { data: users, error } = await sb.from("users").select("data")
 
-      const data = db.users[i] || placeholder
+  if (error) {
+    console.log(error)
+    return
+  }
 
-      tbody.innerHTML += `
+  users.sort((a, b) => a.data.total - b.data.total)
+
+  Array(16).fill().forEach((_,i) => {
+    const placeholder = {
+      name: "-",
+      scores: ["-", "-", "-"],
+      total: "-"
+    }
+
+    const { data: user } = users[i] || { data: placeholder }
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${i+1}</td>
+        <td>${user.name}</td>
+        ${user.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
+        <td>${timeFormat(user.total)}</td>
+      </tr>
+    `
+  })
+
+  const userStorate = JSON.parse(localStorage.getItem("user"))
+  
+  users.forEach((user, i) => {
+    const IsUSerScores = user.scores.every((score, i) => score === userStorate.scores[i])
+    const isUserName = user.name === userStorate.name
+
+    if (isUserName && IsUSerScores) {
+      tfoot.innerHTML = `
+        <tr>
+          <td colspan="6">Your Rank</td>
+        </tr>
         <tr>
           <td>${i+1}</td>
-          <td>${data.name}</td>
-          ${data.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
-          <td>${timeFormat(data.total)}</td>
+          <td>${user.name}</td>
+          ${user.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
+          <td>${timeFormat(user.total)}</td>
         </tr>
       `
-    })
-
-    const userStorate = JSON.parse(localStorage.getItem("user"))
-    
-    db.users.forEach((user, i) => {
-      const isUserName = user.name === userStorate.name
-      const IsUSerScores = user.scores.every((score, i) => score === userStorate.scores[i])
-
-      if (isUserName && IsUSerScores) {
-        tfoot.innerHTML = `
-          <tr>
-            <td colspan="6">Your Rank</td>
-          </tr>
-          <tr>
-            <td>${i+1}</td>
-            <td>${user.name}</td>
-            ${user.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
-            <td>${timeFormat(user.total)}</td>
-          </tr>
-        `
-      }
-    })
+    }
   })
-  .catch(err => console.log(err))
 }
 
 getUserList()

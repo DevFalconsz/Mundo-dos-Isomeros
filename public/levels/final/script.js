@@ -4,6 +4,11 @@ const scoreTotal = document.querySelector(".score-total")
 const scoreName = document.querySelector(".score-name")
 const scoreBody = document.querySelector(".score-body")
 
+const SUPABASE_URL = "https://cgxrznxnjxxvsymdmatc.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNneHJ6bnhuanh4dnN5bWRtYXRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzczNjk2MDcsImV4cCI6MTk5Mjk0NTYwN30.r55VK2Z_7pUz9UrruWDMRvQcoyVQMhBP3GC54aXDtTM"
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
 const animateTypingTitle = () => {
   const title = "ocê completou o nível!"
   const titleAsArray = title.split("")
@@ -66,17 +71,11 @@ const handleRanking = async () => {
   const user = JSON.parse(userAsJsonSanitize)
 
   if (user.scores.length === 3) {
-    await fetch("../../auth/register", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: user.name,
-        scores: user.scores,
-        total: user.scores.reduce((a,v) => a+v)
-      })
-    }).catch(err => console.log(err))
+    await sb.from("users").insert({ data: {
+      name: user.name,
+      scores: user.scores,
+      total: user.scores.reduce((a,v) => a+v)
+    }})
   }
 }
 

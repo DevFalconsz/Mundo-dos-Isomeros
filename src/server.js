@@ -10,7 +10,7 @@ const server = createServer(app)
 //app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use("/", express.static("public"))
-app.use("/levels", express.static("public/levels"))
+//app.use("/levels", express.static("public/levels"))
 //app.use("/auth", router)
 
 server.listen(3000)

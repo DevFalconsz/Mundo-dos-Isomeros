@@ -48,9 +48,9 @@ const getUserList = async () => {
 
   const userStorate = JSON.parse(localStorage.getItem("user"))
   
-  users.forEach((user, i) => {
-    const IsUSerScores = user.scores.every((score, i) => score === userStorate.scores[i])
-    const isUserName = user.name === userStorate.name
+  users.forEach(({ data }, i) => {
+    const IsUSerScores = data.scores.every((score, i) => score === userStorate.scores[i])
+    const isUserName = data.name === userStorate.name
 
     if (isUserName && IsUSerScores) {
       tfoot.innerHTML = `
@@ -59,9 +59,9 @@ const getUserList = async () => {
         </tr>
         <tr>
           <td>${i+1}</td>
-          <td>${user.name}</td>
-          ${user.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
-          <td>${timeFormat(user.total)}</td>
+          <td>${data.name}</td>
+          ${data.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
+          <td>${timeFormat(data.total)}</td>
         </tr>
       `
     }

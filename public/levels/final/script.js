@@ -50,7 +50,7 @@ const showUserScore = () => {
 }
 
 const addLinkButton = () => {
-  const linksAceepted = ["../fase2/pages/game.html", "../fase3", "../../"]
+  const linksAceepted = ["../fase2/pages/game.html", "../fase3/", "../../"]
   const user = JSON.parse(localStorage.getItem("user"))
 
   buttonContinue.addEventListener("click", e => {

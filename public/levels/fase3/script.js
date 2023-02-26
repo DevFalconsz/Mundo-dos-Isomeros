@@ -260,7 +260,7 @@ const init = () => {
       user.scores[2] = Math.floor(time / 1000)
       localStorage.setItem("user", JSON.stringify(user))
 
-      location = "../final"
+      location = "../final/"
     }
 
     if (players.player2.score >= 3) {

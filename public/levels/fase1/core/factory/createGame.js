@@ -131,7 +131,7 @@ const createGame = canvas => {
       user.scores[0] = Math.floor(time / 1000)
       localStorage.setItem("user", JSON.stringify(user))
 
-      location = "../final"
+      location = "../final/"
     })
 
     gameEvents.on("start-chrono", () => state.obj.shapeChrono.start())

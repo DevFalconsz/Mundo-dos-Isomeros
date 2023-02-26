@@ -45,7 +45,7 @@ const checkEndGame = () => {
     user.scores[1] = Math.floor((timestamp.current - timestamp.start) / 1000);
     localStorage.setItem("user", JSON.stringify(user));
 
-    location = "../../final";
+    location = "../../final/";
   }
 }
 

@@ -82,7 +82,7 @@ btnSubmit.addEventListener("click", e => {
     name: nameSanitize, scores: []
   }))
 
-  location = "./levels"
+  location = "./levels/"
 })
 
 inputName.addEventListener("input", e => {

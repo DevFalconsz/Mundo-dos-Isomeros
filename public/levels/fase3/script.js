@@ -184,12 +184,12 @@ const init = () => {
 
     const handleBotAction = () => {
       const { turn, players } = state
-      players[turn]?.chooseTile(state)
+      players[turn].chooseTile(state)
       
       if (checkedBoard()) {
         setTimeout(() => {
           control.addEventListener("click", handleMouse, { once: true })
-        }, 1100)
+        }, 1600)
         return
       }
 
@@ -338,7 +338,7 @@ const init = () => {
     if (checkedBoard()) {
       setTimeout(() => {
         control.addEventListener("click", handleMouse, { once: true })
-      }, 1100)
+      }, 1600)
       return
     }
 

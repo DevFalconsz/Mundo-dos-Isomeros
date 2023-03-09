@@ -73,7 +73,7 @@ getUserList()
 btnSubmit.addEventListener("click", e => {
   e.preventDefault()
 
-  if (inputName.value.length < 3) { return }
+  if (inputName.value.length < 3 || inputName.value.length > 8) { return }
   
   const nameSanitize = DOMPurify.sanitize(inputName.value)
   if (/.*\<.*\>.*/.test(nameSanitize)) { return }
@@ -86,10 +86,10 @@ btnSubmit.addEventListener("click", e => {
 })
 
 inputName.addEventListener("input", e => {
-  if (inputName.value.length >= 3) {
-    btnSubmit.classList.remove("disable")
+  if (inputName.value.length < 3 || inputName.value.length > 8) {
+    btnSubmit.classList.add("disable")
     return
   }
 
-  btnSubmit.classList.add("disable")
+  btnSubmit.classList.remove("disable")
 })

@@ -2,7 +2,7 @@ const spanPlayer = document.querySelector('.player');
 const timer = document.querySelector('.timer');
 const grid = document.querySelector('.grid');
 
-const soundtrack = new Audio('../audio/somGame.wav');
+const soundtrack = new Audio('audio/somGame.wav');
 soundtrack.volume = 0.2;
 soundtrack.loop = "loop";
 soundtrack.play();
@@ -45,7 +45,7 @@ const checkEndGame = () => {
     user.scores[1] = Math.floor((timestamp.current - timestamp.start) / 1000);
     localStorage.setItem("user", JSON.stringify(user));
 
-    location = "../../final/";
+    location = "../final/";
   }
 }
 
@@ -104,7 +104,7 @@ const createCard = (character) => {
   const front = createElement('div', 'face front');
   const back = createElement('div', 'face back');
 
-  front.style.backgroundImage = `url('../imagens/${character}.png')`;
+  front.style.backgroundImage = `url('img/${character}.png')`;
 
   card.appendChild(front);
   card.appendChild(back);
@@ -145,7 +145,8 @@ const startTimer = () => {
 }
 
 window.onload = () => {
-  spanPlayer.innerHTML = "default";
+  const user = JSON.parse(localStorage.getItem("user"))
+  spanPlayer.innerHTML = user.name || "default";
   startTimer();
   loadGame();
 }

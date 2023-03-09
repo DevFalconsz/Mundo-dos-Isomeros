@@ -1,13 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  border: none;
+  font-family: 'Press Start 2P', cursive;
+}
+
 main {
     display: flex;
     flex-direction: column;
     width: 100%;
-    background-image: url('../imagens/bg.jpg');
+    background-image: url('img/bg.jpg');
     background-size: cover;
-    min-height: 100vh;
+    height: 100dvh;
     align-items: center;
     justify-content: center;
-    padding: 20px 20px 50px;
+    padding: 50px 20px;
   }
   
   header {
@@ -24,17 +35,17 @@ main {
   }
   
   .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 15px;
-    width: 100%;
-    max-width: 800px;
+    width: 30rem;
+    /*max-width: 800px;*/
     margin: 0 auto;
   }
   
   .card {
     aspect-ratio: 3/4;
-    width: 100%;
+    width: min(5rem, 100%);
     border-radius: 5px;
     position: relative;
     transition: all 400ms ease;
@@ -58,7 +69,7 @@ main {
   }
   
   .back {
-    background-image: url('../imagens/back.png');
+    background-image: url('img/back.png');
     backface-visibility: hidden;
   }
   

@@ -225,9 +225,9 @@ const createGame = canvas => {
     }
 
     const frameQuestionProps = {
-      x: halfScreenWidth - 300 - 25,
-      y: halfScreenHeight - 225 - 25,
-      width: 650, height: 500, radius: 10,
+      x: halfScreenWidth - 225,
+      y: halfScreenHeight - 250,
+      width: 450, height: 550, radius: 10,
     }
 
     state.obj.shapeChrono.render(frameChronoProps)

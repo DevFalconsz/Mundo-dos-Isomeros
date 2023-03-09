@@ -48,8 +48,6 @@ const createChrono = (ctx) => {
 
       const { timestampStart, timestampCurrent, timestampAccumulate } = chrono
       const time = timestampAccumulate + (timestampCurrent - timestampStart)
-
-      console.log(time)
     }, 1000)
   }
 

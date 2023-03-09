@@ -111,7 +111,7 @@ const createQuestion = (imgs, state, ctx) => {
         stroke: "#888",
         lineWidth: 4,
       }, {
-        font: "bold 30px verdana",
+        font: "bold 24px verdana",
         string: string,
         fill: altFormated === res ? "#0F0" : "#F00",
         stroke: "#0000",
@@ -182,6 +182,7 @@ const createQuestion = (imgs, state, ctx) => {
     ctx.fillStyle = "#000"
     ctx.textAlign = "center"
     ctx.textBaseline = "top"
+    ctx.font = "bold 14px verdana"
 
     ctx.fillText(question.enum, x + (width / 2), y + 20)
 
@@ -190,23 +191,23 @@ const createQuestion = (imgs, state, ctx) => {
     question.btnOptions.forEach((btnOption, index) => {
       const btnOptionProps = {
         x: x + 20,
-        y: y + height - 50 + (40 * (index - (question.btnOptions.length - 1))),
-        width: 300, height: 30, radius: 10,
+        y: y + height - 100 + (40 * (index - (question.btnOptions.length - 1))),
+        width: 275, height: 30, radius: 10,
       }
 
       btnOption.render(btnOptionProps)
     })
 
     const frameScoreProps = {
-      x: x + width - 250, y: y + height - 210,
-      width: 230, height: 30, radius: 10,
+      x: x + 10, y: y + height - 50,
+      width: 200, height: 30, radius: 10,
     }
 
     question.frameScore.render(frameScoreProps)
 
     const frameAccScoreProps = {
-      x: x + width - 250, y: y + height - 50,
-      width: 230, height: 30, radius: 10,
+      x: x + width - 230, y: y + height - 50,
+      width: 220, height: 30, radius: 10,
     }
 
     question.frameAccScore.render(frameAccScoreProps)

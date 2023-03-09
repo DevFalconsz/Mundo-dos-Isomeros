@@ -10,7 +10,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 const animateTypingTitle = () => {
-  const title = "ocê completou o nível!"
+  const title = "Você completou o nível!"
   const titleAsArray = title.split("")
 
   const animate = () => {
@@ -50,7 +50,7 @@ const showUserScore = () => {
 }
 
 const addLinkButton = () => {
-  const linksAceepted = ["../fase2/pages/game.html", "../fase3/", "../../"]
+  const linksAceepted = ["../nivel2/", "../nivel3/", "../../"]
   const user = JSON.parse(localStorage.getItem("user"))
 
   buttonContinue.addEventListener("click", e => {

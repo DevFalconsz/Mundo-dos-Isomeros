@@ -2,11 +2,8 @@
   "name": "vagetti-dev.github.io",
   "version": "1.0.0",
   "description": "Site para estudo sobre os isômeros.",
-  "main": "./src/server.js",
+  "main": "server.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Vagetti-dev/Vagetti-dev.github.io.git"
@@ -19,10 +16,6 @@
   },
   "homepage": "https://github.com/Vagetti-dev/Vagetti-dev.github.io#readme",
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "mongodb": "^5.1.0",
-    "mongoose": "^6.9.2"
+    "express": "^4.18.2"
   }
 }

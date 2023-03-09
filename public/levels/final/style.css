@@ -3,7 +3,7 @@
 * {
   user-select: none; outline: none;
   box-sizing: border-box;
-  font-family: 'Press Start 2P';font-weight: lighter;
+  font-family: 'Press Start 2P'; font-weight: lighter;
   padding: 0; margin: 0; border: 0;
 }
 
@@ -12,7 +12,7 @@ body {
   justify-content: center;
   align-items: center;
   background: #222;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .container-score {
@@ -21,14 +21,16 @@ body {
 	justify-content: center;
 	align-items: center;
 	background: #CCC;
-	width: 60vw;
-	padding: 1rem 0;
+	width: clamp(20rem, 80%, 50rem);
+	padding: 1rem 2rem;
 	border-radius: 5px;
 }
 
 .score-title {
-	font-size: 2rem;
+	text-align: center;
+  font-size: 2rem;
 	color: #444;
+  min-height: 2rem;
 	margin: 1rem 0;
 }
 
@@ -92,6 +94,7 @@ body {
 	background: #C00;
 	width: 15rem;
 	padding: 1rem 0.5rem;
+  margin: 1rem 0;
 	border-radius: 5px;
 }
 .button-continue:hover {background: #800;}

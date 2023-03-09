@@ -11,9 +11,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  align-items: center;
   background: #222;
-  height: 100vh;
+  min-height: 100dvh;
 }
 
 .container-info {
@@ -25,6 +24,7 @@ body {
 
 .container-header {
   text-align: center;
+  margin: 1rem 0;
 }
 
 .title {
@@ -60,6 +60,7 @@ body {
   color: #FFF;
   background: #C00;
   padding: 0.5rem 0.2rem;
+  margin-bottom: 1rem;
   border-radius: 5px;
 }
 .button-start:hover {

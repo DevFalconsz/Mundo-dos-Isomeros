@@ -3,8 +3,8 @@ const tfoot = document.querySelector(".leaderboard-foot")
 const btnSubmit = document.querySelector(".menu-button")
 const inputName = document.querySelector(".menu-input")
 
-const SUPABASE_URL = "https://cgxrznxnjxxvsymdmatc.supabase.co"
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNneHJ6bnhuanh4dnN5bWRtYXRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzczNjk2MDcsImV4cCI6MTk5Mjk0NTYwN30.r55VK2Z_7pUz9UrruWDMRvQcoyVQMhBP3GC54aXDtTM"
+const SUPABASE_URL = "https://xbihbjssyptazqfdepxk.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiaWhianNzeXB0YXpxZmRlcHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODA0NDMyNDEsImV4cCI6MTk5NjAxOTI0MX0.US0TpGoTbP4MTMyTwwrAtLrRhnb4LBmCOKR72z68vRQ"
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 

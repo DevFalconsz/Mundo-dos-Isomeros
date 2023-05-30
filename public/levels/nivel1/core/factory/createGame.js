@@ -9,13 +9,14 @@ import gameEvents from '../gameEvents.js'
 const createGame = canvas => {
   const ctx = canvas.getContext("2d")
   const uploadImg = (() => {
-    const list = ["CADEIA", "FUNÇÃO", "POSIÇÃO", "METAMERIA", "TAUTOMERIA"]
+    const list = ["CADEIA", "FUNCAO", "POSICAO", "METAMERIA", "TAUTOMERIA"]
+    const alt = ["CADEIA", "FUNÇÃO", "POSIÇÃO", "METAMERIA", "TAUTOMERIA"]
     const imgFileNames = Array(30).fill().map((_,i) => `${list[i%5]}${(i%6)+1}.png`)
 
-    const imgAll = imgFileNames.map(imgFileName => {
+    const imgAll = imgFileNames.map((imgFileName, i) => {
       const img = new Image()
       img.src = `./imgs/${imgFileName}`
-      img.alt = imgFileName.match(/^[^\.0-9]+/m)
+      img.alt = alt[i%5]
 
       return img
     })
@@ -30,7 +31,7 @@ const createGame = canvas => {
     mouse: {x: 0, y: 0, type: ""},
   }
 
-  const start = () => {
+  const start = sb => {
     const frameRoullete = createFrame({
       fill: "#CCC",
       stroke: "#888",
@@ -122,16 +123,17 @@ const createGame = canvas => {
       gameObserver.subscribles(gameSteps[state.step])
     })
 
-    gameEvents.on("end-game", () => {
+    gameEvents.on("end-game", async () => {
       gameObserver.unsubscribleAll()
       
       const time = shapeChrono.getTime()
-      
-      const user = JSON.parse(localStorage.getItem("user"))
-      user.scores[0] = Math.floor(time / 1000)
-      localStorage.setItem("user", JSON.stringify(user))
+      const auth = localStorage.getItem("auth")
+      const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
 
-      location = "../final/"
+      info.scores[0] = Math.floor(time / 1000)
+      await sb.from("users").update({ info }).eq("auth", auth)
+
+      location.replace("../final/")
     })
 
     gameEvents.on("start-chrono", () => state.obj.shapeChrono.start())

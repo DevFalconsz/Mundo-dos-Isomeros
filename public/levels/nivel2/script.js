@@ -1,6 +1,10 @@
+import config from './../../config.json' assert { type: "json" }
+
 const spanPlayer = document.querySelector('.player');
 const timer = document.querySelector('.timer');
 const grid = document.querySelector('.grid');
+
+const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
 
 const soundtrack = new Audio('audio/somGame.wav');
 soundtrack.volume = 0.2;
@@ -35,17 +39,19 @@ const createElement = (tag, className) => {
 let firstCard = '';
 let secondCard = '';
 
-const checkEndGame = () => {
+const checkEndGame = async () => {
   const disabledCards = document.querySelectorAll('.disabled-card');
 
   if (disabledCards.length === 20) {
     clearInterval(timestamp.timerID);
-    
-    const user = JSON.parse(localStorage.getItem("user"));
-    user.scores[1] = Math.floor((timestamp.current - timestamp.start) / 1000);
-    localStorage.setItem("user", JSON.stringify(user));
 
-    location = "../final/";
+    const auth = localStorage.getItem("auth");
+    const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth);
+
+    info.scores[1] = Math.floor((timestamp.current - timestamp.start) / 1000);
+    await sb.from("users").update({ info }).eq("auth", auth);
+
+    location.replace("../final/");
   }
 }
 
@@ -110,7 +116,7 @@ const createCard = (character) => {
   card.appendChild(back);
 
   card.addEventListener('click', revealCard);
-  card.setAttribute('data-character', character)
+  card.setAttribute('data-character', character);
 
   return card;
 }
@@ -144,9 +150,31 @@ const startTimer = () => {
   }, 1000);
 }
 
-window.onload = () => {
-  const user = JSON.parse(localStorage.getItem("user"))
-  spanPlayer.innerHTML = user.name || "default";
+window.addEventListener("load", async e => {
+  const auth  = localStorage.getItem("auth");
+  
+  if (!auth) {
+    location.replace("../../");
+    return;
+  }
+  
+  const { data, error } = await sb.from("users").select().eq("auth", auth)
+
+  if (error || !data[0]) {
+    location.replace("../../");
+    return;
+  }
+  
+  const scoreAmoult = data[0].info.scores.filter(score => score > 0);
+  
+  if (scoreAmoult.length != 1) {
+    location.replace("../nivel1/");
+    return;
+  }
+  
+  const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
+  
+  spanPlayer.innerHTML = info.name;
   startTimer();
   loadGame();
-}
+})

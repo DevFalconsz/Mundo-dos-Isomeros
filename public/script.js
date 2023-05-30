@@ -1,12 +1,11 @@
+import config from './config.json' assert { type: "json" }
+
 const tbody = document.querySelector(".leaderboard-body")
 const tfoot = document.querySelector(".leaderboard-foot")
 const btnSubmit = document.querySelector(".menu-button")
 const inputName = document.querySelector(".menu-input")
 
-const SUPABASE_URL = "https://xbihbjssyptazqfdepxk.supabase.co"
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiaWhianNzeXB0YXpxZmRlcHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODA0NDMyNDEsImV4cCI6MTk5NjAxOTI0MX0.US0TpGoTbP4MTMyTwwrAtLrRhnb4LBmCOKR72z68vRQ"
-
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
 
 const timeFormat = time => {
   if ((typeof time) === "string") { return time }
@@ -18,75 +17,76 @@ const timeFormat = time => {
 }
 
 const getUserList = async () => {
-  const { data: users, error } = await sb.from("users").select("data")
+  const { data: users, error } = await sb.from("users").select()
 
   if (error) {
     console.log(error)
     return
   }
+  
+  users.sort((a, b) => a.info.total - b.info.total)
 
-  users.sort((a, b) => a.data.total - b.data.total)
+  const placeholders = Array(16).fill({
+    info: {name: "-", scores: ["-", "-", "-"], total: "-"}
+  })
+  
+  const players = users.concat(placeholders)
 
   Array(16).fill().forEach((_,i) => {
-    const placeholder = {
-      name: "-",
-      scores: ["-", "-", "-"],
-      total: "-"
-    }
-
-    const { data: user } = users[i] || { data: placeholder }
+    const { info } = players[i]
 
     tbody.innerHTML += `
       <tr>
         <td>${i+1}</td>
-        <td>${user.name}</td>
-        ${user.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
-        <td>${timeFormat(user.total)}</td>
+        <td>${info.name}</td>
+        ${info.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
+        <td>${timeFormat(info.total)}</td>
       </tr>
     `
   })
 
-  const userStorate = JSON.parse(localStorage.getItem("user"))
+  const authCurrent = localStorage.getItem("auth")
   
-  users.forEach(({ data }, i) => {
-    const IsUSerScores = data.scores.every((score, i) => score === userStorate.scores[i])
-    const isUserName = data.name === userStorate.name
-
-    if (isUserName && IsUSerScores) {
-      tfoot.innerHTML = `
-        <tr>
-          <td colspan="6">Your Rank</td>
-        </tr>
-        <tr>
-          <td>${i+1}</td>
-          <td>${data.name}</td>
-          ${data.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
-          <td>${timeFormat(data.total)}</td>
-        </tr>
-      `
-    }
+  users.forEach(({ auth, info }, i) => {
+    if (auth !== authCurrent) { return }
+    
+    tfoot.innerHTML = `
+      <tr>
+        <td colspan="6">Your Rank</td>
+      </tr>
+      <tr>
+        <td>${i+1}</td>
+        <td>${info.name}</td>
+        ${info.scores.map(score => `<td>${timeFormat(score)}</td>`).join("\n")}
+        <td>${timeFormat(info.total)}</td>
+      </tr>
+    `
   })
 }
 
 getUserList()
 
-btnSubmit.addEventListener("click", e => {
-  e.preventDefault()
+btnSubmit.addEventListener("click", async e => {
+  const name = DOMPurify.sanitize(inputName.value)
 
-  if (inputName.value.length < 3 || inputName.value.length > 8) { return }
-  
-  const nameSanitize = DOMPurify.sanitize(inputName.value)
-  if (/.*\<.*\>.*/.test(nameSanitize)) { return }
+  if (/.*\<.*\>.*/.test(name)) { return }
+  if (name.length < 3 || name.length > 8) { return }
 
-  localStorage.setItem("user", JSON.stringify({
-    name: nameSanitize, scores: []
-  }))
+  const auth = CryptoJS.SHA256(name + Date.now() + String(Math.random())).toString()
 
-  location = "./levels/"
-})
+  await sb.from("users").insert({
+    auth, info: { name, scores: [0, 0, 0], total: 3600 }
+  })
+
+  localStorage.setItem("auth", auth)
+
+  location.replace("./levels/")
+}, { once: true })
 
 inputName.addEventListener("input", e => {
-  if (inputName.value.length < 3 || inputName.value.length > 8) {
+  const name = inputName.value
+
+  if (name.length < 3 || name.length > 8) {
     btnSubmit.classList.add("disable")
     return
   }

@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="./style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.0/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <link rel="icon" href="./favicon.png">
     <title>Mundo dos Isômeros</title>
@@ -15,7 +19,7 @@
       <img class="menu-icon" src="./favicon.png" alt="atom icon">
       <h1 class="menu-text">Olá, bem vindo ao Mundo do Isômeros!</h1>
       <input class="menu-input" type="text" maxlength="8" placeholder="digite seu nome" autofocus>
-      <button class="menu-button disable" type="submit">Iniciar</button>
+      <button class="menu-button disable" type="button">Iniciar</button>
     </form>
 
     <table class="container-leaderboard">
@@ -50,8 +54,6 @@
       </tfoot>
     </table>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.0/purify.min.js"></script>
-    <script src="./script.js"></script>
+    <script src="./script.js" type="module"></script>
   </body>
 </html>

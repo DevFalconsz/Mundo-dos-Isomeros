@@ -1,13 +1,10 @@
+import config from './../../config.json' assert { type: "json" }
+
 const buttonContinue = document.querySelector(".button-continue")
 const scoreTitle = document.querySelector(".score-title")
 const scoreTotal = document.querySelector(".score-total")
 const scoreName = document.querySelector(".score-name")
 const scoreBody = document.querySelector(".score-body")
-
-const SUPABASE_URL = "https://xbihbjssyptazqfdepxk.supabase.co"
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiaWhianNzeXB0YXpxZmRlcHhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODA0NDMyNDEsImV4cCI6MTk5NjAxOTI0MX0.US0TpGoTbP4MTMyTwwrAtLrRhnb4LBmCOKR72z68vRQ"
-
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 const animateTypingTitle = () => {
   const title = "Você completou o nível!"
@@ -23,7 +20,7 @@ const animateTypingTitle = () => {
   animate()
 }
 
-const showUserScore = () => {
+const showUserScore = async sb => {
   const timeFormat = score => {
     const seconds = String(score % 60).padStart(2, "0")
     const minutes = String(Math.floor(score / 60) % 60).padStart(2, "0")
@@ -31,30 +28,33 @@ const showUserScore = () => {
     return `${minutes}:${seconds}`
   }
 
-  const user = JSON.parse(localStorage.getItem("user"))
+  const auth = localStorage.getItem("auth")
+  const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
   const cells = [...scoreBody.children[0].children]
 
-  scoreName.textContent = user.name
+  scoreName.textContent = info.name
 
   cells.forEach((td, i) => {
-    if (user.scores[i]) {
-      td.textContent = timeFormat(user.scores[i])
+    if (info.scores[i]) {
+      td.textContent = timeFormat(info.scores[i])
       td.classList.remove("without-score")
     }
   })
 
-  if (user.scores[2]) {
-    scoreTotal.textContent = timeFormat(user.scores.reduce((a,v) => a+v))
+  if (info.scores[2]) {
+    scoreTotal.textContent = timeFormat(info.scores.reduce((a,v) => a+v))
     scoreTotal.classList.remove("without-score")
   }
 }
 
-const addLinkButton = () => {
+const addLinkButton =  async sb => {
   const linksAceepted = ["../nivel2/", "../nivel3/", "../../"]
-  const user = JSON.parse(localStorage.getItem("user"))
-
+  const auth = localStorage.getItem("auth")
+  const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
+  const scoreFilted = info.scores.filter(score => score > 0)
+  
   buttonContinue.addEventListener("click", e => {
-    location = linksAceepted[user.scores.length - 1]
+    location.replace(linksAceepted[scoreFilted.length - 1])
   })
 }
 
@@ -65,44 +65,36 @@ const playsoundtrack = () => {
   soundtrack.play()
 }
 
-const handleRanking = async () => {
-  const userAsJson = localStorage.getItem("user")
-  const userAsJsonSanitize = DOMPurify.sanitize(userAsJson)
-  const user = JSON.parse(userAsJsonSanitize)
+const handleRanking = async sb => {
+  const auth = localStorage.getItem("auth")
+  const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
 
-  if (user.scores.length === 3) {
-    await sb.from("users").insert({ data: {
-      name: user.name,
-      scores: user.scores,
-      total: user.scores.reduce((a,v) => a+v)
-    }})
-  }
+  if (!info.scores.every(score => score > 0)) { return }
+  
+  info.total = info.scores.reduce((a, v) => a + v, 0)
+  await sb.from("users").update({ info }).eq("auth", auth)
 }
 
-animateTypingTitle()
-playsoundtrack()
-showUserScore()
-addLinkButton()
-handleRanking()
+window.addEventListener("load", async e => {
+  const auth = localStorage.getItem("auth")
+  
+  if (!auth) {
+    location.replace("../../")
+    return
+  }
+  
+  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  
+  const { data, error } = await sb.from("users").select("auth").eq("auth", auth)
 
-// var string = "Parabéns por ter finalizado todo o site dos isômeros!"; /* type your text here */
-// var array = string.split("");
-// var timer = null;
+  if (error || !data[0]) {
+    location.replace("../../")
+    return
+  }
 
-// var somRoleta = new Audio('audio/somFinal.wav');
-// somRoleta.volume = 0.2;
-// somRoleta.loop = "loop";
-// somRoleta.play();
-
-// function frameLooper () {
-//   if (array.length > 0) {
-//     document.getElementById("text").innerHTML += array.shift();
-//   } else {
-//     clearTimeout(timer);
-//     return
-//   }
-
-//   timer = setTimeout(frameLooper, 70); /* change 70 for speed */
-// }
-
-// frameLooper();
+  showUserScore(sb)
+  addLinkButton(sb)
+  handleRanking(sb)
+  playsoundtrack()
+  animateTypingTitle()
+})

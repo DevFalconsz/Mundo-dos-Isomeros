@@ -1,3 +1,4 @@
+import config from './../../config.json' assert { type: "json" }
 import createGame from './core/factory/createGame.js'
 
 const canvas = document.querySelector('[data-js="game"]')
@@ -8,7 +9,32 @@ soundtrack.volume = 0.2
 soundtrack.loop = "loop"
 soundtrack.play()
 
-game.start()
+window.addEventListener("load", async e => {
+  const auth  = localStorage.getItem("auth")
+  
+  if (!auth) {
+    location.replace("../../")
+    return
+  }
+  
+  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  
+  const { data, error } = await sb.from("users").select().eq("auth", auth)
+
+  if (error || !data[0]) {
+    location.replace("../../")
+    return
+  }
+
+  const scoreAmoult = data[0].info.scores.filter(score => score > 0)
+  
+  if (scoreAmoult.length != 0) {
+    location.replace("../../")
+    return
+  }
+  
+  game.start(sb)
+})
 
 window.addEventListener("resize", game.resizeGame)
 canvas.addEventListener("click", game.handleMouse)

@@ -1,3 +1,5 @@
+import config from './../../config.json' assert { type: "json" }
+
 const scoreboard = document.querySelector('[data-js="scoreboard"]')
 const control = document.querySelector('[data-js="control"]')
 const board = document.querySelector('[data-js="board"]')
@@ -7,7 +9,7 @@ soundtrack.volume = 0.2
 soundtrack.loop = "loop"
 soundtrack.play()
 
-const init = () => {
+const init = sb => {
   const state = {
     scoreboard: null,
     board: null,
@@ -242,7 +244,7 @@ const init = () => {
     return isBoardFull || isPlayerWin
   }
 
-  const scoreMark = () => {
+  const scoreMark = async () => {
     const { scoreboard, turn, players } = state
 
     const scoreboardIndex = scoreboard.findIndex(({ player }) => player === turn)
@@ -255,12 +257,13 @@ const init = () => {
       clearInterval(timestamp.timerID)
       const time = timestamp.current - timestamp.start
 
+      const auth = localStorage.getItem("auth")
+      const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
+      
+      info.scores[2] = Math.floor(time / 1000)
+      await sb.from("users").update({ info }).eq("auth", auth)
 
-      const user = JSON.parse(localStorage.getItem("user"))
-      user.scores[2] = Math.floor(time / 1000)
-      localStorage.setItem("user", JSON.stringify(user))
-
-      location = "../final/"
+      location.replace("../final/")
     }
 
     if (players.player2.score >= 3) {
@@ -354,4 +357,29 @@ const init = () => {
   setup()
 }
 
-init()
+window.addEventListener("load", async e => {
+  const auth  = localStorage.getItem("auth")
+  
+  if (!auth) {
+    location.replace("../../")
+    return
+  }
+  
+  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  
+  const { data, error } = await sb.from("users").select().eq("auth", auth)
+
+  if (error || !data[0]) {
+    location.replace("../../")
+    return
+  }
+  
+  const scoreAmoult = data[0].info.scores.filter(score => score > 0)
+  
+  if (scoreAmoult.length != 2) {
+    location.replace("../nivel2/")
+    return
+  }
+
+  init(sb)
+})

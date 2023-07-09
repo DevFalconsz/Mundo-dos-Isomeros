@@ -132,7 +132,6 @@ const createGame = canvas => {
 
       info.scores[0] = Math.floor(time / 1000)
       await sb.from("users").update({ info }).eq("auth", auth)
-
       location.replace("../final/")
     })
 

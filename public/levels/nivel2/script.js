@@ -1,10 +1,15 @@
-import config from './../../config.json' assert { type: "json" }
-
 const spanPlayer = document.querySelector('.player');
 const timer = document.querySelector('.timer');
 const grid = document.querySelector('.grid');
 
-const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+const getConfig = async () => {
+  const configAsText = await fetch("./../../config.json").then(res => res.text())
+  const config = JSON.parse(configAsText)
+  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  return sb
+}
+
+const sb = await getConfig()
 
 const soundtrack = new Audio('audio/somGame.wav');
 soundtrack.volume = 0.2;

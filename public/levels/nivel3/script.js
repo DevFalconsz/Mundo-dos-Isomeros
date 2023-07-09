@@ -1,5 +1,3 @@
-import config from './../../config.json' assert { type: "json" }
-
 const scoreboard = document.querySelector('[data-js="scoreboard"]')
 const control = document.querySelector('[data-js="control"]')
 const board = document.querySelector('[data-js="board"]')
@@ -8,6 +6,13 @@ const soundtrack = new Audio('audio/somGame.wav')
 soundtrack.volume = 0.2
 soundtrack.loop = "loop"
 soundtrack.play()
+
+const getConfig = async () => {
+  const configAsText = await fetch("./../../config.json").then(res => res.text())
+  const config = JSON.parse(configAsText)
+  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  return sb
+}
 
 const init = sb => {
   const state = {
@@ -365,7 +370,7 @@ window.addEventListener("load", async e => {
     return
   }
   
-  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  const sb = await getConfig()
   
   const { data, error } = await sb.from("users").select().eq("auth", auth)
 

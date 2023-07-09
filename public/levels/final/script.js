@@ -1,10 +1,15 @@
-import config from './../../config.json' assert { type: "json" }
-
 const buttonContinue = document.querySelector(".button-continue")
 const scoreTitle = document.querySelector(".score-title")
 const scoreTotal = document.querySelector(".score-total")
 const scoreName = document.querySelector(".score-name")
 const scoreBody = document.querySelector(".score-body")
+
+const getConfig = async () => {
+  const configAsText = await fetch("./../../config.json").then(res => res.text())
+  const config = JSON.parse(configAsText)
+  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  return sb
+}
 
 const animateTypingTitle = () => {
   const title = "Você completou o nível!"
@@ -83,7 +88,7 @@ window.addEventListener("load", async e => {
     return
   }
   
-  const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
+  const sb = await getConfig()
   
   const { data, error } = await sb.from("users").select("auth").eq("auth", auth)
 

@@ -9,8 +9,6 @@ const getConfig = async () => {
   return sb
 }
 
-const sb = await getConfig()
-
 const soundtrack = new Audio('audio/somGame.wav');
 soundtrack.volume = 0.2;
 soundtrack.loop = "loop";
@@ -44,7 +42,7 @@ const createElement = (tag, className) => {
 let firstCard = '';
 let secondCard = '';
 
-const checkEndGame = async () => {
+const checkEndGame = async (sb) => {
   const disabledCards = document.querySelectorAll('.disabled-card');
 
   if (disabledCards.length === 20) {
@@ -60,7 +58,7 @@ const checkEndGame = async () => {
   }
 }
 
-const checkCards = () => {
+const checkCards = (sb) => {
   const firstCharacter = firstCard.getAttribute('data-character');
   const secondCharacter = secondCard.getAttribute('data-character');
 
@@ -72,7 +70,7 @@ const checkCards = () => {
     firstCard = '';
     secondCard = '';
 
-    checkEndGame();
+    checkEndGame(sb);
 
   } else {
     setTimeout(() => {
@@ -88,7 +86,7 @@ const checkCards = () => {
 
 }
 
-const revealCard = ({ target }) => {
+const revealCard = ({ target }, sb) => {
 
   if (target.parentNode.className.includes('reveal-card')) {
     return;
@@ -104,12 +102,12 @@ const revealCard = ({ target }) => {
     target.parentNode.classList.add('reveal-card');
     secondCard = target.parentNode;
 
-    checkCards();
+    checkCards(sb);
 
   }  
 }
 
-const createCard = (character) => {
+const createCard = (character, sb) => {
 
   const card = createElement('div', 'card');
   const front = createElement('div', 'face front');
@@ -120,19 +118,19 @@ const createCard = (character) => {
   card.appendChild(front);
   card.appendChild(back);
 
-  card.addEventListener('click', revealCard);
+  card.addEventListener('click', e => revealCard(e, sb));
   card.setAttribute('data-character', character);
 
   return card;
 }
 
-const loadGame = () => {
+const loadGame = sb => {
   const duplicateCharacters = [ ...characters, ...characters ];
 
   const shuffledArray = duplicateCharacters.sort(() => Math.random() - 0.5);
 
   shuffledArray.forEach((character) => {
-    const card = createCard(character);
+    const card = createCard(character, sb);
     grid.appendChild(card);
   });
 }
@@ -163,6 +161,8 @@ window.addEventListener("load", async e => {
     return;
   }
   
+  const sb = await getConfig()
+  
   const { data, error } = await sb.from("users").select().eq("auth", auth)
 
   if (error || !data[0]) {
@@ -181,5 +181,5 @@ window.addEventListener("load", async e => {
   
   spanPlayer.innerHTML = info.name;
   startTimer();
-  loadGame();
+  loadGame(sb);
 })

@@ -30,13 +30,25 @@ const getUserList = async (sb) => {
   users.sort((a, b) => a.info.total - b.info.total)
 
   const placeholders = Array(16).fill({
-    info: {name: "-", scores: ["-", "-", "-"], total: "-"}
+    info: {name: "--------", scores: ["-----", "-----", "-----"], total: "------"}
   })
   
   const players = users.concat(placeholders)
 
   Array(16).fill().forEach((_,i) => {
     const { info } = players[i]
+    if (info.total >= 3600) {
+      tbody.innerHTML += `
+        <tr>
+          <td>${i+1}</td>
+          <td>---------</td>
+          ${info.scores.map(score => `<td>-----</td>`).join("\n")}
+          <td>-----</td>
+        </tr>
+      `
+
+      return
+    }
 
     tbody.innerHTML += `
       <tr>
@@ -51,8 +63,8 @@ const getUserList = async (sb) => {
   const authCurrent = localStorage.getItem("auth")
   
   users.forEach(({ auth, info }, i) => {
-    if (auth !== authCurrent) { return }
-    
+    if (auth !== authCurrent || info.total >= 3600) { return }
+
     tfoot.innerHTML = `
       <tr>
         <td colspan="6">Your Rank</td>

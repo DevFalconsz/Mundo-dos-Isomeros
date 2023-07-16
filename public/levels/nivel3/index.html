@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="./style.css">
-    
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <link rel="icon" href="../../favicon.png">
@@ -13,10 +12,38 @@
   </head>
 
   <body>
-    <div class="scoreboard" data-js="scoreboard"></div>
-    <div class="board" data-js="board"></div>
-    <div class="control" data-js="control"></div>
+    <section class="score">
+      <div class="score_content">
+        <p class="score_player">YOU - <span data-score="you">0</span></p>
+        <p class="score_player" data-time>00:00</p>
+        <p class="score_player">BOT - <span data-score="bot">0</span></p>
+      </div>
+    </section>
 
-    <script src="./script.js" type="module"></script>
+    <section class="board">
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+      <p class="board_tile"><span class="tile_text" data-tile></span></p>
+    </section>
+
+    <section class="painel" data-controls>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+      <button class="painel_button" data-button></button>
+    </section>
+
+    <script src="script.js"></script>
   </body>
 </html>

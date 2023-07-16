@@ -1,365 +1,187 @@
-const scoreboard = document.querySelector('[data-js="scoreboard"]')
-const control = document.querySelector('[data-js="control"]')
-const board = document.querySelector('[data-js="board"]')
+const controls = document.querySelector('[data-controls]')
+const buttons = document.querySelectorAll('[data-button]')
+const scores = document.querySelectorAll('[data-score]')
+const tiles = document.querySelectorAll('[data-tile]')
+const time = document.querySelector('[data-time]')
 
-const soundtrack = new Audio('audio/somGame.wav')
-soundtrack.volume = 0.2
-soundtrack.loop = "loop"
-soundtrack.play()
+const init = async sb => {
+  const game = {
+    referency: {
+      "compensacao": "metoxipropano etoxietano",
+      "tautomeria": "acetona e propenol",
+      "geometrica": "but 2 eno",
+      "funcional": "etoxietano e butanol",
+      "geometria": "dicloro e but 2 eno",
+      "posicao": "but 1 eno e but 2 eno",
+      "nucleo": "cliclopropano e propano",
+      "cadeia": "butano e metil propano",
+      "optica": "carbono quiral"
+    },
+    board: Array(9).fill(),
+    isProcessing: false,
+    players: {
+      "player1": {char: 'X', score: 0},
+      "player2": {char: 'O', score: 0}
+    },
+    turn: "player1"
+  }
+
+  const timestamp = {
+    current: Date.now(),
+    start: Date.now(),
+    timerID: null
+  }
+
+  timestamp.timerID = window.setInterval(() => {
+    timestamp.current = Date.now()
+
+    const timeCurrent = timestamp.current - timestamp.start
+    const secs = `${Math.floor(timeCurrent / 1000) % 60}`.padStart(2, "0")
+    const mins = `${Math.floor(timeCurrent / 60000) % 60}`.padStart(2, "0")
+
+    time.textContent = `${mins}:${secs}`
+  }, 1000)
+
+  const delay = ms => new Promise(res => setTimeout(res, ms))
+
+  const resetBoard = () => {
+    const referencyAsArray = Object.entries(game.referency).sort(() => Math.floor(Math.random() * 3) - 1)
+    const buttonRandomize = [...buttons].sort(() => Math.floor(Math.random() * 3) - 1)
+
+    game.board = referencyAsArray.map(([ key, value ], i) => {
+      const button = buttonRandomize[i]
+      const tile = tiles[i]
+
+      button.classList.remove("disable")
+      button.textContent = value
+
+      tile.classList.remove("mark")
+      tile.textContent = key
+
+      return { button, tile, char: '#' }
+    })
+  }
+
+  const checkBoard = () => {
+    const regexTemplate = "(@@@.{6})|(...@@@...)|(.{6}@@@)|(@..){3}|(.@.){3}|(..@){3}|(..@.@.@..)|(@...@...@)"
+    const boardAsString = game.board.map(({ char }) => char).join("")
+    const playerCurrentChar = game.players[game.turn].char
+
+    const isPlayerWin = RegExp(regexTemplate.replace(/@/g, playerCurrentChar)).test(boardAsString)
+    const isBoardFull = !boardAsString.includes("#")
+
+    if (isPlayerWin) {
+      game.players[game.turn].score += 1
+
+      if (game.turn === "player1") {
+        scores[0].textContent = game.players[game.turn].score
+
+        if (game.players[game.turn].score > 2) {
+          game.players["player1"].score = 0
+          scores[0].textContent = 0
+
+          game.players["player2"].score = 0
+          scores[1].textContent = 0
+
+          handlePlayerWin()
+        }
+
+        game.isProcessing = false
+      }
+
+      if (game.turn === "player2") {
+        scores[1].textContent = game.players[game.turn].score
+
+        if (game.players[game.turn].score > 2) {
+          game.players["player1"].score = 0
+          scores[0].textContent = 0
+
+          game.players["player2"].score = 0
+          scores[1].textContent = 0
+        }
+      }
+
+      resetBoard()
+      handleBot()
+      return
+    }
+
+    if (isBoardFull) {
+      game.isProcessing = false
+
+      resetBoard()
+      handleBot()
+      return
+    }
+
+    game.turn = (game.turn === "player1") ? "player2" : "player1"
+    handleBot()
+  }
+
+  const handlePlayerWin = async () => {
+    clearInterval(timestamp.timerID)
+    const timeTotal = timestamp.current - timestamp.start
+
+    const auth = localStorage.getItem("auth")
+    const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
+    
+    info.scores[2] = Math.floor(timeTotal / 1000)
+    await sb.from("users").update({ info }).eq("auth", auth)
+
+    location.replace("../final/")
+  }
+
+  const handleBot = () => {
+    if (game.turn === "player1") { return }
+    
+    const boardFilted = game.board.filter(({ char }) => char === '#')
+    const randomIndex = Math.floor(Math.random() * boardFilted.length)
+    const slotSelect = boardFilted[randomIndex]
+
+    slotSelect.button.click()
+  }
+
+  const handleMark = target => {
+    const slotSelect = game.board.find(slot => slot.button === target)
+
+    slotSelect.tile.textContent = game.players[game.turn].char
+    slotSelect.tile.classList.add("mark")
+
+    slotSelect.button.classList.add("disable")
+    
+    slotSelect.char = game.players[game.turn].char
+  }
+
+  const handleClick = async ({ target }) => {
+    if (game.isProcessing && game.turn === "player1") { return }
+    if (target.nodeName != "BUTTON") { return }
+    if (target.classList.contains("disable")) { return }
+
+    game.isProcessing = game.turn === "player1"
+
+    handleMark(target)
+    await delay(500)
+    checkBoard()
+  }
+
+  resetBoard()
+  handleSound()
+
+  controls.addEventListener("click", handleClick)
+}
+
+const handleSound = () => {
+  const soundtrack = new Audio('audio/somGame.wav')
+  soundtrack.volume = 0.2
+  soundtrack.loop = "loop"
+  soundtrack.play()
+}
 
 const getConfig = async () => {
   const configAsText = await fetch("./../../config.json").then(res => res.text())
   const config = JSON.parse(configAsText)
   const sb = supabase.createClient(config.SUPABASE_URL, config.SUPABASE_KEY)
   return sb
-}
-
-const init = sb => {
-  const state = {
-    scoreboard: null,
-    board: null,
-    turn: "",
-    players: {},
-    data: {
-      controlText: [],
-      tileText: [],
-      objRef: {},
-    },
-  }
-
-  const timestamp = {
-    timerID: null,
-    current: 0,
-    start: 0,
-  }
-
-  const setup = () => {
-    state.data.objRef = {
-      "but 1 eno e but 2 eno":      "posicao",
-      "cliclopropano e propano":    "nucleo",
-      "metoxipropano etoxietano":   "compensacao",
-      "etoxietano e butanol":       "funcional",
-      "but 2 eno":                  "geometrica",
-      "butano e metil propano":     "cadeia",
-      "acetona e propenol":         "tautomeria",
-      "dicloro e but 2 eno":        "geometria",
-      "carbono quiral":             "optica",
-    }
-    
-    state.data.controlText = Object.keys(state.data.objRef)
-    state.data.tileText = Object.values(state.data.objRef)
-
-    const { randomizeTileText, randomizeControlText } = randomizePairArray(state.data)
-    
-    state.data.controlText = randomizeControlText
-    state.data.tileText = randomizeTileText
-
-    state.players = {
-      player1: {name: "player", char: "X", score: 0},
-      player2: createBot({name: "bot", char: "O", score: 0})
-    }
-
-    state.scoreboard = createScoreboard(state.players)
-
-    const documentFragmentscoreboard = new DocumentFragment()
-
-    state.scoreboard.forEach(({ score }) => {
-      documentFragmentscoreboard.append(score)
-    })
-    scoreboard.append(documentFragmentscoreboard)
-
-    const timespan = document.createElement("span")
-    const timediv = document.createElement("div")
-
-    timediv.classList.add("time-container")
-    timespan.classList.add("time")
-
-    timespan.innerHTML = "00:00"
-    timediv.append(timespan)
-
-    scoreboard.insertBefore(timediv, scoreboard.lastChild)
-
-    state.board = createBoard(state.data)
-
-    const documentFragmentControl = new DocumentFragment()
-    const documentFragmentBoard = new DocumentFragment()
-
-    state.board.forEach(({ boardTile, btnControl }) => {
-      documentFragmentControl.append(btnControl)
-      documentFragmentBoard.append(boardTile)
-    })
-    control.append(documentFragmentControl)
-    board.append(documentFragmentBoard)
-
-    state.turn = "player1"
-
-    control.addEventListener("click", handleMouse, { once: true })
-
-    const timeFormat = () => {
-      const time = timestamp.current - timestamp.start
-      const secs = String(Math.floor(time / 1000) % 60).padStart(2, "0")
-      const mins = String(Math.floor(time / 60000) % 60).padStart(2, "0")
-    
-      return `${mins}:${secs}`
-    }
-
-    const timer = document.querySelector('.time')
-
-    timestamp.start = Date.now()
-    timestamp.current = Date.now()
-
-    timestamp.timerID = setInterval(() => {
-      timestamp.current = Date.now()
-      timer.innerHTML = timeFormat()
-    }, 1000)
-  }
-
-  const createBoard = ({ tileText, controlText }) => {
-    const createBoardTile = (text) => {
-      const span = document.createElement("span")
-      const div = document.createElement("div")
-
-      span.classList.add("tile-text")
-      div.classList.add("tile")
-
-      span.textContent = text
-      div.dataset.js = text
-      div.append(span)
-
-      return div
-    }
-
-    const createBtnControl = (text) => {
-      const button = document.createElement("button")
-      const span = document.createElement("span")
-
-      button.classList.add("btn-control")
-      span.classList.add("btn-text")
-
-      button.dataset.js = text
-      span.textContent = text
-      button.type = "button"
-      button.append(span)
-
-      return button
-    }
-
-    return Array(9).fill().map((_,i) => ({
-      char: "#",
-      boardTile: createBoardTile(tileText[i]),
-      btnControl: createBtnControl(controlText[i]),
-    }))
-  }
-
-  const createScoreboard = players => {
-    const playersAsArray = Object.entries(players)
-    
-    const createScore = ({ name, score }) => {
-      const span = document.createElement("span")
-      const div = document.createElement("div")
-
-      div.classList.add("score-container")
-      span.classList.add("score")
-
-      span.textContent = `${name} - ${score}`
-      div.append(span)
-
-      return div
-    }
-
-    return playersAsArray.map(([ key, value ]) => ({
-      player: key, score: createScore(value),
-    }))
-  }
-
-  const createBot = props => {
-    const chooseTile = ({ board, turn, players, data }) => {
-      const boardFormated = board.map(({ char }, i) => char === "#" ? i : "").filter(char => char !== "")
-      const chooseIndex = Math.floor(Math.random() * boardFormated.length)
-      const chooseBoardTile = boardFormated[chooseIndex]
-
-      if (!board[chooseBoardTile]) { return }
-      
-      board[chooseBoardTile].boardTile.children[0].textContent = players[turn].char
-      board[chooseBoardTile].boardTile.children[0].classList.add("mark")
-      board[chooseBoardTile].char = players[turn].char
-
-      const btnControlIndex = board.findIndex(({ btnControl }) => data.objRef[btnControl.dataset.js] === board[chooseBoardTile].boardTile.dataset.js)
-
-      board[btnControlIndex].btnControl.classList.add("selected")
-    }
-
-    const handleBotAction = () => {
-      const { turn, players } = state
-      players[turn].chooseTile(state)
-      
-      if (checkedBoard()) {
-        setTimeout(() => {
-          control.addEventListener("click", handleMouse, { once: true })
-        }, 1600)
-        return
-      }
-
-      const playerList = Object.keys(players)
-      const nextTurn = playerList[playerList.indexOf(turn) + 1] || playerList[0]
-      state.turn = nextTurn
-
-      control.addEventListener("click", handleMouse, { once: true })
-    }
-
-    return {
-      ...props,
-      chooseTile,
-      handleBotAction
-    }
-  }
-
-  const checkedBoard = () => {
-    const { board, turn, players } = state
-    const boardAsString = board.map(({ char }) => char).join("")
-
-    const isBoardFull = !boardAsString.includes("#")
-    const isPlayerWin = Object.values(players).some(({ char }) => {
-      const regAsString = "(XXX.{6})|(...XXX...)|(.{6}XXX)|(X..){3}|(.X.){3}|(..X){3}|(..X.X.X..)|(X...X...X)".replace(/X/g, char)
-      return RegExp(regAsString).test(boardAsString)
-    })
-
-    if (isBoardFull) {
-      setTimeout(() => {
-        resetBoard()
-
-        if (isPlayerWin && turn === "player2") {
-          setTimeout(players[turn].handleBotAction, 500)
-        }
-      }, 1000)
-    }
-
-    if (isPlayerWin) {
-      scoreMark()
-
-      setTimeout(() => {
-        resetBoard()
-
-        if (isPlayerWin && turn === "player2") {
-          setTimeout(players[turn].handleBotAction, 500)
-        }
-      }, 1000)
-    }
-
-    return isBoardFull || isPlayerWin
-  }
-
-  const scoreMark = async () => {
-    const { scoreboard, turn, players } = state
-
-    const scoreboardIndex = scoreboard.findIndex(({ player }) => player === turn)
-    players[turn].score = players[turn].score + 1
-    
-    const { name, score } = players[turn]
-    scoreboard[scoreboardIndex].score.children[0].textContent = `${name} - ${score}`
-
-    if (players.player1.score >= 3) {
-      clearInterval(timestamp.timerID)
-      const time = timestamp.current - timestamp.start
-
-      const auth = localStorage.getItem("auth")
-      const { data: [ { info } ] } = await sb.from("users").select("info").eq("auth", auth)
-      
-      info.scores[2] = Math.floor(time / 1000)
-      await sb.from("users").update({ info }).eq("auth", auth)
-
-      location.replace("../final/")
-    }
-
-    if (players.player2.score >= 3) {
-      players.player1.score = 0
-      players.player2.score = 0
-
-      timestamp.start = Date.now()
-      timestamp.current = Date.now()
-    }
-  }
-
-  const resetBoard = () => {
-    const { randomizeTileText, randomizeControlText } = randomizePairArray(state.data)
-    
-    state.data.controlText = randomizeControlText
-    state.data.tileText = randomizeTileText
-
-    state.board = createBoard(state.data)
-
-    const documentFragmentControl = new DocumentFragment()
-    const documentFragmentBoard = new DocumentFragment()
-
-    state.board.forEach(({ boardTile, btnControl }) => {
-      documentFragmentControl.append(btnControl)
-      documentFragmentBoard.append(boardTile)
-    })
-
-    control.innerHTML = ""
-    board.innerHTML = ""
-    control.append(documentFragmentControl)
-    board.append(documentFragmentBoard)
-  }
-
-  const randomizePairArray = ({ tileText, controlText }) => {
-    const randomizeControlText = Array(controlText.length).fill().map(() => {
-      const sortIndex = Math.floor(Math.random() * controlText.length)
-      const sortValue = controlText[sortIndex]
-
-      controlText.splice(sortIndex, 1)
-      return sortValue
-    })
-
-    const randomizeTileText = Array(tileText.length).fill().map(() => {
-      const sortIndex = Math.floor(Math.random() * tileText.length)
-      const sortValue = tileText[sortIndex]
-      
-      tileText.splice(sortIndex, 1)
-      return sortValue
-    })
-
-    return {randomizeTileText, randomizeControlText}
-  }
-
-  const handleMouse = async ({ target }) => {
-    if (target === control) {
-      control.addEventListener("click", handleMouse, { once: true })
-      return
-    }
-
-    const { board, turn, players, data } = state
-
-    const boardIndex = board.findIndex(({ boardTile }) => data.objRef[target.dataset.js] === boardTile.dataset.js)
-
-    if (board[boardIndex].char !== "#") {
-      control.addEventListener("click", handleMouse, { once: true })
-      return
-    }
-
-    board[boardIndex].boardTile.children[0].textContent = players[turn].char
-    board[boardIndex].boardTile.children[0].classList.add("mark")
-    board[boardIndex].char = players[turn].char
-    
-    target.classList.add("selected")
-
-    if (checkedBoard()) {
-      setTimeout(() => {
-        control.addEventListener("click", handleMouse, { once: true })
-      }, 1600)
-      return
-    }
-
-    const playerList = Object.keys(players)
-    const nextTurn = playerList[playerList.indexOf(turn) + 1] || playerList[0]
-    state.turn = nextTurn
-
-    if (nextTurn === "player2") {
-      setTimeout(players[state.turn].handleBotAction, 500)
-    }
-  }
-
-  setup()
 }
 
 window.addEventListener("load", async e => {

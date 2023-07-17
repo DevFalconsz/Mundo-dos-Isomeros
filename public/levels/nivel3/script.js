@@ -102,16 +102,12 @@ const init = async sb => {
       }
 
       resetBoard()
-      handleBot()
-      return
     }
 
     if (isBoardFull) {
       game.isProcessing = false
 
       resetBoard()
-      handleBot()
-      return
     }
 
     game.turn = (game.turn === "player1") ? "player2" : "player1"
@@ -185,15 +181,16 @@ const getConfig = async () => {
 }
 
 window.addEventListener("load", async e => {
-  const auth  = localStorage.getItem("auth")
+  // const auth  = localStorage.getItem("auth")
   
-  if (!auth) {
-    location.replace("../../")
-    return
-  }
+  // if (!auth) {
+  //   location.replace("../../")
+  //   return
+  // }
   
   const sb = await getConfig()
-  
+  init(sb)
+  return
   const { data, error } = await sb.from("users").select().eq("auth", auth)
 
   if (error || !data[0]) {

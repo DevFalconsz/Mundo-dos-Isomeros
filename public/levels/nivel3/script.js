@@ -85,8 +85,6 @@ const init = async sb => {
 
           handlePlayerWin()
         }
-
-        game.isProcessing = false
       }
 
       if (game.turn === "player2") {
@@ -105,13 +103,10 @@ const init = async sb => {
     }
 
     if (isBoardFull) {
-      game.isProcessing = false
-
       resetBoard()
     }
 
     game.turn = (game.turn === "player1") ? "player2" : "player1"
-    handleBot()
   }
 
   const handlePlayerWin = async () => {
@@ -127,7 +122,7 @@ const init = async sb => {
     location.replace("../final/")
   }
 
-  const handleBot = () => {
+  const handleBot = async () => {
     if (game.turn === "player1") { return }
     
     const boardFilted = game.board.filter(({ char }) => char === '#')
@@ -148,22 +143,25 @@ const init = async sb => {
     slotSelect.char = game.players[game.turn].char
   }
 
-  const handleClick = async ({ target }) => {
-    if (game.isProcessing && game.turn === "player1") { return }
+  const handleGame = async ({ target }) => {
     if (target.nodeName != "BUTTON") { return }
     if (target.classList.contains("disable")) { return }
-
-    game.isProcessing = game.turn === "player1"
 
     handleMark(target)
     await delay(500)
     checkBoard()
   }
 
+  const handleClick = async e => {
+    await handleGame(e)
+    controls.addEventListener("click", handleClick, { once: true })
+    handleBot()
+  }
+
   resetBoard()
   handleSound()
 
-  controls.addEventListener("click", handleClick)
+  controls.addEventListener("click", handleClick, { once: true })
 }
 
 const handleSound = () => {
@@ -180,17 +178,16 @@ const getConfig = async () => {
   return sb
 }
 
-window.addEventListener("load", async e => {
-  // const auth  = localStorage.getItem("auth")
-  
-  // if (!auth) {
-  //   location.replace("../../")
-  //   return
-  // }
+window.addEventListener("load", async () => {
+  const auth  = localStorage.getItem("auth")
+
+  if (!auth) {
+    location.replace("../../")
+    return
+  }
   
   const sb = await getConfig()
-  init(sb)
-  return
+
   const { data, error } = await sb.from("users").select().eq("auth", auth)
 
   if (error || !data[0]) {

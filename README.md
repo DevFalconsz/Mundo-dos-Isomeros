@@ -6,4 +6,4 @@ O presente trabalho teve como objetivo estudar e investigar o uso do Software Ed
 **Palavras-chave: Ensino de química; Jogos lúdicos; Software em química.**
 
 ### [Tese completa](https://github.com/Vagetti-dev/Mundo-dos-Isomeros/blob/main/.github/Tese.pdf)
-![Game](https://giphy.com/embed/zQ5r7FWZ7VPlm)
+![Game](https://github.com/Vagetti-dev/Gif/blob/main/giphy.gif)

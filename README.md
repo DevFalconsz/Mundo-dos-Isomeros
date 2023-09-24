@@ -24,7 +24,7 @@ Conheça os cérebros por trás do Site dos Isômeros:
 - **Octávio** - *Fullstack Developer*
    - GitHub: [octavio_oi](https://github.com/octavio-oi)
 
-- **Patrick** - *Guru de back-end*
+- **Patrick** - *Front-end Developer*
    - GitHub: [DevFalconsz](https://github.com/DevFalconsz)
 
 ## O Software Educacional

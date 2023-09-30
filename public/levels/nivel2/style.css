@@ -64,6 +64,24 @@ header {
   transition: all 400ms ease;
 }
 
+.front {
+  transform: rotateY(180deg);
+}
+  
+.back {
+  background-image: url('img/back.png');
+  backface-visibility: hidden;
+}
+  
+.reveal-card {
+  transform: rotateY(180deg);
+}
+  
+.disabled-card {
+  filter: saturate(0);
+  opacity: 0.5;
+}
+
 @media only screen and (max-width: 600px) {
   header {
     padding: 10px;

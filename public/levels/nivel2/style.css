@@ -10,93 +10,74 @@
 }
 
 main {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-image: url('img/bg.jpg');
-  background-size: cover;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  padding: 50px 20px;
-}
-
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: rgba(255, 255, 255, 0.8);
-  font-size: 1.2em;
-  width: 100%;
-  max-width: 800px;
-  padding: 30px;
-  margin: 0 0 30px;
-  border-radius: 5px;
-}
-
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  width: 30rem;
-  margin: 0 auto;
-}
-
-.card {
-  aspect-ratio: 3/4;
-  width: min(5rem, 100%);
-  border-radius: 5px;
-  position: relative;
-  transition: all 400ms ease;
-  transform-style: preserve-3d;
-  background-color: #ccc;
-}
-
-.face {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background-size: cover;
-  background-position: center;
-  border: 2px solid #39813a;
-  border-radius: 5px;
-  transition: all 400ms ease;
-}
-
-.front {
-  transform: rotateY(180deg);
-}
-
-.back {
-  background-image: url('img/back.png');
-  backface-visibility: hidden;
-}
-
-.reveal-card {
-  transform: rotateY(180deg);
-}
-
-.disabled-card {
-  filter: saturate(0);
-  opacity: 0.5;
-}
-
-/* Responsividade para telas menores que 600px */
-@media only screen and (max-width: 600px) {
-  main {
-    padding: 30px 10px;
-  }
-
-  header {
-    padding: 15px;
-  }
-
-  .grid {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    padding: 0 10px;
+    background-image: url('img/bg.jpg');
+    background-size: cover;
+    height: 100dvh;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
   }
-
+  
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2em;
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    margin: 0 0 30px;
+    border-radius: 5px;
+  }
+  
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 30rem;
+    /*max-width: 800px;*/
+    margin: 0 auto;
+  }
+  
   .card {
-    width: min(100%, 15rem);
+    aspect-ratio: 3/4;
+    width: min(5rem, 100%);
+    border-radius: 5px;
+    position: relative;
+    transition: all 400ms ease;
+    transform-style: preserve-3d;
+    background-color: #ccc;
   }
-}
+  
+  .face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #39813a;
+    border-radius: 5px;
+    transition: all 400ms ease;
+  }
+  
+  .front {
+    transform: rotateY(180deg);
+  }
+  
+  .back {
+    background-image: url('img/back.png');
+    backface-visibility: hidden;
+  }
+  
+  .reveal-card {
+    transform: rotateY(180deg);
+  }
+  
+  .disabled-card {
+    filter: saturate(0);
+    opacity: 0.5;
+  }

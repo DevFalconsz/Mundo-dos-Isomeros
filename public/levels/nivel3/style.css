@@ -84,7 +84,7 @@ body, p {margin: 0;}
   cursor: pointer;
   font-size: 0.7rem;
   color: #ff0000;
-  background: #888;
+  background: #5e5e5e;
   width: calc(33.3% - 1rem);
   padding-inline: 0.5rem;
   border: 1px solid #FFF;

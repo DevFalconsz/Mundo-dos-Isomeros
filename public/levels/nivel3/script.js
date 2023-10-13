@@ -7,13 +7,13 @@ const time = document.querySelector('[data-time]')
 const init = async sb => {
   const game = {
     referency: {
-      "COMPENSACAO": "METOXIPROPANO ETOXIETANO",
+      "COMPENSAÇÃO": "METOXIPROPANO ETOXIETANO",
       "TAUTOMERIA": "ACETONA E PROPENOL",
       "CIS": "BUT 2 ENO",
-      "FUNCAO": "ETOXIETANO E BUTANOL",
+      "FUNÇÃO": "ETOXIETANO E BUTANOL",
       "TRANS": "DICLORO E BUT 2 ENO",
-      "POSICAO": "BUT 1 ENO E BUT 2 ENO",
-      "NUCLEO": "CLICLOPROPANO E PROPENO",
+      "POSIÇÃO": "BUT 1 ENO E BUT 2 ENO",
+      "NÚCLEO": "CLICLOPROPANO E PROPENO",
       "CADEIA": "BUTANO E METIL PROPANO",
       "ÓPTICA": "CARBONO QUIRAL"
     },

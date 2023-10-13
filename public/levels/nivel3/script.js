@@ -8,7 +8,7 @@ const init = async sb => {
   const game = {
     referency: {
       "COMPENSACAO": "METOXIPROPANO ETOXIETANO",
-      "TEUTORMERIA": "ACETONA E PROPENOL",
+      "TAUTOMERIA": "ACETONA E PROPENOL",
       "CIS": "BUT 2 ENO",
       "FUNCAO": "ETOXIETANO E BUTANOL",
       "TRANS": "DICLORO E BUT 2 ENO",

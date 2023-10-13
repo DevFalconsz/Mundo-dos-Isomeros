@@ -83,8 +83,8 @@ body, p {margin: 0;}
   display: inline;
   cursor: pointer;
   font-size: 0.7rem;
-  color: #ff0000;
-  background: #5e5e5e;
+  color: #ffffff;
+  background: #444444;
   width: calc(33.3% - 1rem);
   padding-inline: 0.5rem;
   border: 1px solid #FFF;
@@ -92,7 +92,7 @@ body, p {margin: 0;}
 }
 .painel_button:hover,
 .painel_button:focus-visible {
-  background: #444;
+  background: #191919;
 }
 
 .mark {
@@ -103,5 +103,5 @@ body, p {margin: 0;}
 
 .disable {
   cursor: default;
-  background: #444;
+  background: #320000;
 }

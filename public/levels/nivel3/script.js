@@ -7,15 +7,15 @@ const time = document.querySelector('[data-time]')
 const init = async sb => {
   const game = {
     referency: {
-      "compensacao": "metoxipropano etoxietano",
-      "tautomeria": "acetona e propenol",
-      "geometrica": "but 2 eno",
-      "funcional": "etoxietano e butanol",
-      "geometria": "dicloro e but 2 eno",
-      "posicao": "but 1 eno e but 2 eno",
-      "nucleo": "cliclopropano e propano",
-      "cadeia": "butano e metil propano",
-      "optica": "carbono quiral"
+      "COMPENSACAO": "METOXIPROPANO ETOXIETANO",
+      "TEUTORMERIA": "ACETONA E PROPENOL",
+      "CIS": "BUT 2 ENO",
+      "FUNCAO": "ETOXIETANO E BUTANOL",
+      "TRANS": "DICLORO E BUT 2 ENO",
+      "POSICAO": "BUT 1 ENO E BUT 2 ENO",
+      "NUCLEO": "CLICLOPROPANO E PROPENO",
+      "CADEIA": "BUTANO E METIL PROPANO",
+      "ÓPTICA": "CARBONO QUIRAL"
     },
     board: Array(9).fill(),
     isProcessing: false,

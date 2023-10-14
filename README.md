@@ -17,6 +17,47 @@ Bem-vindo ao nosso site, onde tornamos o aprendizado de química envolvente e di
 
 Nossa abordagem se baseia em extensa pesquisa e na aplicação de Software Educacional fundamentado na Teoria da Mediação Cognitiva de Vygotsky. Acreditamos que a tecnologia, quando usada como ferramenta educacional, pode aproximar a teoria da prática, tornando conceitos complexos mais acessíveis aos estudantes.
 
+# Mapa do Site - Projeto de Jogos Educativos
+
+## Tabela de Conteúdos
+- [Leaderboard](#leaderboard)
+- [Página de Apresentação](#página-de-apresentação)
+- [Fase 1 - Roleta](#fase-1-roleta)
+- [Fase 1 - Quiz](#fase-1-quiz)
+- [Fase 2 - Jogo da Memória](#fase-2-jogo-da-memória)
+- [Mensagem de Nível Completo](#mensagem-de-nível-completo)
+- [Fase 3 - Jogo da Velha](#fase-3-jogo-da-velha)
+
+## Leaderboard
+- **Descrição:** Página exibindo a pontuação e classificação dos jogadores.
+- **Screenshot:** ![Leaderboard](https://i.imgur.com/fuUjDaQ.png)
+
+## Página de Apresentação
+- **Descrição:** Página inicial apresentando o conceito do jogo e instruções.
+- **Screenshot:** ![Página de Apresentação](https://i.imgur.com/0sPM0gF.png)
+
+## Fase 1 - Roleta
+- **Descrição:** Primeira fase do jogo envolvendo uma roleta interativa.
+- **Screenshot:** ![Fase 1 - Roleta](https://i.imgur.com/3zCvaus.png)
+
+## Fase 1 - Quiz
+- **Descrição:** Perguntas de quiz relacionadas à temática da roleta.
+- **Screenshot:** ![Fase 1 - Quiz](https://i.imgur.com/EqN7zTe.png)
+
+## Fase 2 - Jogo da Memória
+- **Descrição:** Segunda fase com um jogo de memória desafiador.
+- **Screenshot:** ![Fase 2 - Jogo da Memória](https://i.imgur.com/wKWqLQK.png)
+- **Screenshot:** ![Fase 2 - Jogo da Memória](https://i.imgur.com/u36K0KD.png)
+
+## Mensagem de Nível Completo
+- **Descrição:** Feedback ao jogador após completar uma fase.
+- **Screenshot:** ![Mensagem de Nível Completo](https://i.imgur.com/D9G0hMh.png)
+
+## Fase 3 - Jogo da Velha
+- **Descrição:** Última fase do jogo com um emocionante Jogo da Velha.
+- **Screenshot:** ![Fase 3 - Jogo da Velha](https://i.imgur.com/liG0d3a.png)
+- **Screenshot:** ![Fase 3 - Jogo da Velha](https://i.imgur.com/JL5kTSv.png)
+
 ## Sobre nós
 
 Conheça os cérebros por trás do Site dos Isômeros:
